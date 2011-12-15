@@ -1,0 +1,54 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for glibc
+# see LFS 7.0 chapter 5: 5.7
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/glibc.html
+#
+require_version 1.0_rc17
+
+SRCURL[0]="http://ftp.gnu.org/gnu/glibc/glibc-${PKGVERSION}.tar.bz2"
+
+PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/glibc-2.14.1-gcc_fix-1.patch"
+PATCHURL[1]="http://www.linuxfromscratch.org/patches/lfs/7.0/glibc-2.14.1-cpuid-1.patch"
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+mee_configure_pre() {
+    # set some config parameter
+    case `uname -m` in
+        i?86)
+            echo "CFLAGS += -march=i486 -mtune=native" > configparms
+            ;;
+    esac
+}
+
+mee_configure() {
+    # converting variables from LFS to bee
+    # $(pwd)/../glibc-x.x is source dir ${S}
+    start_cmd ${S}/configure \
+        --prefix=${PREFIX} \
+        --host=${LFS_TGT} \
+        --build=$(${S}/scripts/config.guess) \
+        --disable-profile \
+        --enable-add-ons \
+        --enable-kernel=2.6.25 \
+        --with-headers=${PREFIX}/include \
+        libc_cv_forced_unwind=yes \
+        libc_cv_c_cleanup=yes
+}
+
+mee_install() {
+    # specify install_root because glibc doesn't honor DESTDIR that is used by bee
+    bee_install install_root=${D}
+}
