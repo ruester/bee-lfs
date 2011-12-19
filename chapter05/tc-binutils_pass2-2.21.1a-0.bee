@@ -1,0 +1,42 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for binutils pass2
+# see LFS 7.0 chapter 5: 5.9
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/binutils-pass2.html
+#
+require_version 1.0_rc17
+
+SRCURL[0]="http://ftp.gnu.org/gnu/binutils/binutils-${PKGVERSION}.tar.bz2"
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+# use non-default configure options..
+mee_configure() {
+    # converting variables from LFS to bee
+    # $(pwd)/../binutils-x.x is source dir ${S}
+    CC="${LFS_TGT}-gcc -B${PREFIX}/lib" \
+    AR=${LFS_TGT}-ar \
+    RANLIB=${LFS_TGT}-ranlib \
+    start_cmd ${S}/configure \
+        --prefix=${PREFIX} \
+        --disable-nls \
+        --with-lib-path=${PREFIX}/lib
+}
+
+# preparing the linker
+mee_install_post() {
+    make -C ld clean
+    make -C ld LIB_PATH=/usr/lib:/lib
+    cp -v ${B}/ld/ld-new ${D}/${PREFIX}/bin
+}
