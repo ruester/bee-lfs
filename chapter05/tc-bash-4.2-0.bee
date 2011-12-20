@@ -1,0 +1,38 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for bash
+# see LFS 7.0 chapter 5: 5.16
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/bash.html
+#
+require_version 1.0_rc17
+
+SRCURL[0]="http://ftp.gnu.org/gnu/bash/bash-${PKGVERSION}.tar.gz"
+
+PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/bash-4.2-fixes-3.patch"
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+mee_configure() {
+    start_cmd ${S}/configure \
+        --prefix=${PREFIX} \
+        --without-bash-malloc
+}
+
+mee_build_post() {
+    start_cmd make test
+}
+
+mee_install_post() {
+    start_cmd ln -sv bash ${D}/tools/bin/sh
+}
