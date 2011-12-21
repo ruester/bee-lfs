@@ -1,0 +1,36 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for perl
+# see LFS 7.0 chapter 5: 5.29
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/perl.html
+#
+require_version 1.0_rc17
+
+SRCURL[0]="http://www.cpan.org/src/5.0/perl-${PKGVERSION}.tar.bz2"
+
+PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/perl-5.14.2-libc-1.patch"
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+mee_configure() {
+    start_cmd sh ${S}/Configure -des -Dprefix=${PREFIX}
+}
+
+mee_install() {
+    mkdir -p ${D}/${PREFIX}/bin
+    start_cmd cp -v perl cpan/podlators/pod2man ${D}/${PREFIX}/bin
+
+    mkdir -p ${D}/${PREFIX}/lib/perl5/5.14.2
+    start_cmp cp -Rv lib/* ${D}/${PREFIX}/lib/perl5/5.14.2
+}
