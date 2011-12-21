@@ -1,0 +1,31 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for xz
+# see LFS 7.0 chapter 5: 5.33
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/xz-utils.html
+#
+require_version 1.0_rc17
+
+SRCURL[0]="http://tukaani.org/xz/xz-${PKGVERSION}.tar.bz2"
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+mee_configure() {
+    start_cmd ${S}/configure \
+        --prefix=${PREFIX}
+}
+
+mee_build_post() {
+    start_cmd make check
+}
