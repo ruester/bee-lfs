@@ -10,15 +10,10 @@
 #
 require_version 1.0_rc17
 
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 SRCURL[0]="http://www.kernel.org/pub/linux/kernel/v3.x/linux-${PKGVERSION}.tar.bz2"
-
-# set LFS_TGT if not set..
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
-
-# set PREFIX to LFS_PREFIX (default: /tools)
 PREFIX=${LFS_PREFIX=/tools}
-
-# set explicit PATH
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 mee_configure() {
@@ -26,7 +21,7 @@ mee_configure() {
 }
 
 mee_build() {
-    start_cmd make headers_check
+    start_cmd make -j $CPUS headers_check
 }
 
 mee_install() {

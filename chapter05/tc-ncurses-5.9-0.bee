@@ -10,17 +10,11 @@
 #
 require_version 1.0_rc17
 
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 SRCURL[0]="ftp://ftp.gnu.org/gnu/ncurses/ncurses-${PKGVERSION}.tar.gz"
-
 PATCHURL[0]=""
-
-# set LFS_TGT if not set..
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
-
-# set PREFIX to LFS_PREFIX (default: /tools)
 PREFIX=${LFS_PREFIX=/tools}
-
-# set explicit PATH
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 mee_configure() {
@@ -30,4 +24,8 @@ mee_configure() {
         --without-debug \
         --without-ada \
         --enable-overwrite
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
 }

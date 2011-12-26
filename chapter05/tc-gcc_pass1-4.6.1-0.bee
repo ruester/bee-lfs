@@ -9,24 +9,17 @@
 #
 require_version 1.0_rc17
 
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 MPFR_VERSION=3.1.0
 GMP_VERSION=5.0.2
 MPC_VERSION=0.9
-
 SRCURL[0]="http://ftp.gnu.org/gnu/gcc/gcc-${PKGVERSION}/gcc-${PKGVERSION}.tar.bz2"
 SRCURL[1]="http://www.mpfr.org/mpfr-${MPFR_VERSION}/mpfr-${MPFR_VERSION}.tar.bz2"
 SRCURL[2]="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.bz2"
 SRCURL[3]="http://www.multiprecision.org/mpc/download/mpc-${MPC_VERSION}.tar.gz"
-
 PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/gcc-4.6.1-cross_compile-1.patch"
-
-# set LFS_TGT if not set..
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
-
-# set PREFIX to LFS_PREFIX (default: /tools)
 PREFIX=${LFS_PREFIX=/tools}
-
-# set explicit PATH
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 # before applying any patches:
@@ -63,6 +56,10 @@ mee_configure() {
       --without-cloog \
       --with-mpfr-include=${S}/mpfr/src \
       --with-mpfr-lib=${B}/mpfr/src/.libs
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
 }
 
 # after installing: fix a link
