@@ -16,6 +16,8 @@ SRCURL[0]="http://ftp.gnu.org/gnu/coreutils/coreutils-${PKGVERSION}.tar.xz"
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
+build_in_sourcedir
+
 mee_configure() {
     start_cmd ${S}/configure \
         --prefix=${PREFIX} \

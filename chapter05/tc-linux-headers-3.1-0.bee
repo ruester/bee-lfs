@@ -16,6 +16,8 @@ SRCURL[0]="http://www.kernel.org/pub/linux/kernel/v3.x/linux-${PKGVERSION}.tar.b
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
+build_in_sourcedir
+
 mee_configure() {
     start_cmd make mrproper
 }

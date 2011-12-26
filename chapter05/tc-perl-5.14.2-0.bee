@@ -17,6 +17,8 @@ PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/perl-5.14.2-libc-1.
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
+build_in_sourcedir
+
 mee_configure() {
     start_cmd sh ${S}/Configure -des -Dprefix=${PREFIX}
 }

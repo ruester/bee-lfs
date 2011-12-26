@@ -16,6 +16,8 @@ SRCURL[0]="http://prdownloads.sourceforge.net/expect/expect${PKGVERSION}.tar.gz"
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
+build_in_sourcedir
+
 mee_configure_pre() {
     cp -v ${S}/configure{,.orig}
     sed 's:/usr/local/bin:/bin:' ${S}/configure.orig > ${S}/configure
