@@ -11,7 +11,7 @@
 require_version 1.0_rc17
 
 CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
-SRCURL[0]="http://ftp.gnu.org/gnu//gettext-${PKGVERSION}.tar.gz"
+SRCURL[0]="http://ftp.gnu.org/gnu/gettext/gettext-${PKGVERSION}.tar.gz"
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
