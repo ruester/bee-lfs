@@ -27,7 +27,3 @@ mee_configure() {
 mee_build() {
     start_cmd make -j $CPUS
 }
-
-mee_build_post() {
-    start_cmd make check
-}

@@ -26,7 +26,3 @@ mee_configure() {
 mee_build() {
     true
 }
-
-mee_install_post() {
-    start_cmd make check
-}

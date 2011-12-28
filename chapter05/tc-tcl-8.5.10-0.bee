@@ -25,7 +25,6 @@ mee_configure() {
 
 mee_build() {
     start_cmd make -j $CPUS
-    TZ=UTC start_cmd make test
 }
 
 mee_install() {

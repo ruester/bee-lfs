@@ -29,10 +29,6 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
-mee_build_post() {
-    start_cmd make test
-}
-
 mee_install_post() {
     start_cmd ln -sv bash ${D}/tools/bin/sh
 }

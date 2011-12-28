@@ -35,10 +35,6 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
-mee_build_post() {
-    start_cmd make test
-}
-
 mee_install() {
     start_cmd make DESTDIR=${D} SCRIPTS="" install
 }
