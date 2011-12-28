@@ -32,5 +32,5 @@ mee_install() {
     start_cmd cp -v perl cpan/podlators/pod2man ${D}/${PREFIX}/bin
 
     mkdir -p ${D}/${PREFIX}/lib/perl5/5.14.2
-    start_cmp cp -Rv lib/* ${D}/${PREFIX}/lib/perl5/5.14.2
+    start_cmd cp -Rv lib/* ${D}/${PREFIX}/lib/perl5/5.14.2
 }
