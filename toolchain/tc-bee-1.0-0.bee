@@ -1,0 +1,20 @@
+#!/bin/env beesh
+
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+PREFIX=${LFS_PREFIX=/tools}
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+SRCURL[0]="/usr/src/bee-git.tar"
+PATCHURL[0]=""
+
+build_in_sourcedir
+
+mee_build() {
+    true
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} PREFIX=${PREFIX} install
+}
