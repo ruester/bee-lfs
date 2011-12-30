@@ -1,0 +1,19 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/file-5.09.tar.gz"
+
+build_in_sourcedir
+
+mee_configure() {
+    ${S}/configure --prefix=/usr
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd DESTDIR=${D} install
+}
