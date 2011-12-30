@@ -2,7 +2,7 @@ step-by-step:
 
 * be root
 * cfdisk
-* mkfs.ext2
+* mke2fs -j
 * mount target partition to /mnt/lfs
 * mkdir /mnt/lfs/tools && ln -svf /mnt/lfs/tools /tools
 * cd toolchain
