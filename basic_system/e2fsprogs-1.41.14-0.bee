@@ -1,0 +1,31 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/e2fsprogs-1.41.14.tar.gz"
+
+build_in_sourcedir
+
+mee_configure() {
+    mkdir -v build
+    cd build
+
+    PKG_CONFIG=/tools/bin/true LDFLAGS=-lblkid \
+        ../configure --prefix=/usr --with-root-prefix="" \
+        --enable-elf-shlibs --disable-libblkid --disable-libuuid \
+        --disable-uuidd --disable-fsck
+}
+
+mee_build() {
+    cd ${S}/build
+    make -j $CPUS
+}
+
+mee_install() {
+    cd ${S}/build
+    make DESTDIR=${D} install install-libs
+}
+
+mee_install_post() {
+    chmod -v u+w ${D}/usr/lib/{libcom_err,libe2p,libext2fs,libss}.a
+}
