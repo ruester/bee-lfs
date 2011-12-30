@@ -1,0 +1,45 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for adjusting the toolchain
+# see LFS 7.0 chapter 5: 5.8
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/adjusting.html
+#
+require_version 1.0_rc17
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+mee_configure() {
+    true
+}
+
+mee_build() {
+    true
+}
+
+mee_install() {
+    SPECS=$(dirname $(${LFS_TGT}-gcc -print-libgcc-file-name))/specs
+
+    # fix canonicalized ${PREFIX}
+    cprefix=$(readlink -f ${PREFIX})
+    SPECS=${SPECS#${cprefix}}
+    SPECS=${PREFIX}/${SPECS}
+
+    # create spec-file's parent directory
+    mkdir -p ${D}/${SPECS%/*}
+
+    ${LFS_TGT}-gcc -dumpspecs | sed \
+        -e "s@/lib\(64\)\?/ld@${PREFIX}&@g" \
+        -e "/^\*cpp:$/{n;s,$, -isystem ${PREFIX}/include,}" > ${D}/${SPECS}
+    unset SPECS
+}

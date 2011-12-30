@@ -1,0 +1,100 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for gcc pass2
+# see LFS 7.0 chapter 5: 5.10
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/gcc-pass2.html
+#
+require_version 1.0_rc17
+
+MPFR_VERSION=3.1.0
+GMP_VERSION=5.0.2
+MPC_VERSION=0.9
+
+SRCURL[0]="http://ftp.gnu.org/gnu/gcc/gcc-${PKGVERSION}/gcc-${PKGVERSION}.tar.bz2"
+SRCURL[1]="http://www.mpfr.org/mpfr-${MPFR_VERSION}/mpfr-${MPFR_VERSION}.tar.bz2"
+SRCURL[2]="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.bz2"
+SRCURL[3]="http://www.multiprecision.org/mpc/download/mpc-${MPC_VERSION}.tar.gz"
+
+PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/gcc-4.6.1-startfiles_fix-1.patch"
+
+# set LFS_TGT if not set..
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+
+# set PREFIX to LFS_PREFIX (default: /tools)
+PREFIX=${LFS_PREFIX=/tools}
+
+# set explicit PATH
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+# before applying any patches:
+# setup source directory..
+mee_patch_pre() {
+    cp -v gcc/Makefile.in{,.orig}
+    sed -e "s@\./fixinc\.sh@-c true@" \
+        -e "s/^T_CFLAGS =$/& -fomit-frame-pointer/" \
+        gcc/Makefile.in.orig > gcc/Makefile.in
+
+    for file in $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
+    do
+        cp -uv $file{,.orig}
+        sed -e "s@/lib\(64\)\?\(32\)\?/ld@${PREFIX}&@g" \
+            -e "s@/usr@${PREFIX}@g" \
+            $file.orig > $file
+        echo '#undef STANDARD_INCLUDE_DIR' >> $file
+        echo '#define STANDARD_INCLUDE_DIR 0' >> $file
+        echo '#define STANDARD_STARTFILE_PREFIX_1 ""' >> $file
+        echo '#define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+        touch $file.orig
+    done
+
+    case $(uname -m) in
+        x86_64)
+            for file in $(find gcc/config -name t-linux64)
+            do
+                cp -v $file{,.orig}
+                sed -e "/MULTILIB_OSDIRNAMES/d" $file.orig > $file
+            done
+            ;;
+    esac
+
+    start_cmd mv -v mpfr-${MPFR_VERSION} mpfr
+    start_cmd mv -v gmp-${GMP_VERSION}   gmp
+    start_cmd mv -v mpc-${MPC_VERSION}   mpc
+}
+
+# use non-default configure options..
+mee_configure() {
+
+    # converting variables from LFS to bee
+    # $(pwd)/../gcc-x.x is source dir ${S}
+    # $(pwd)            is build dir ${B}
+
+    CC="${LFS_TGT}-gcc -B${PREFIX}/lib" \
+    AR=${LFS_TGT}-ar \
+    RANLIB=${LFS_TGT}-ranlib \
+    start_cmd ${S}/configure \
+      --prefix=${PREFIX} \
+      --with-local-prefix=${PREFIX} \
+      --enable-clocale=gnu \
+      --enable-shared \
+      --enable-threads=posix \
+      --enable-__cxa_atexit \
+      --enable-languages=c,c++ \
+      --disable-libstdxx-pch \
+      --disable-multilib \
+      --disable-bootstrap \
+      --disable-libgomp \
+      --without-ppl \
+      --without-cloog \
+      --with-mpfr-include=${S}/mpfr/src \
+      --with-mpfr-lib=${B}/mpfr/src/.libs
+}
+
+# after installing set link to cc
+mee_install_post() {
+     start_cmd ln -vs gcc ${D}/${PREFIX}/bin/cc
+}
