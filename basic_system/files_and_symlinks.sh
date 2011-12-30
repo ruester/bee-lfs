@@ -1,5 +1,31 @@
-#!/bin/bash
+#!/tools/bin/bash
 
+# directories
+mkdir -pv /{bin,boot,etc/{opt,sysconfig},home,lib,mnt,opt,run}
+mkdir -pv /{media/{floppy,cdrom},sbin,srv,var}
+
+install -dv -m 0750 /root
+install -dv -m 1777 /tmp ${LFS}/var/tmp
+
+mkdir -pv /usr/{,local/}{bin,include,lib,sbin,src}
+mkdir -pv /usr/{,local/}share/{doc,info,locale,man}
+mkdir -v  /usr/{,local/}share/{misc,terminfo,zoneinfo}
+mkdir -pv /usr/{,local/}share/man/man{1..8}
+
+for dir in /usr /usr/local; do
+    ln -sv share/{man,doc,info} $dir
+done
+
+case $(uname -m) in
+    x86_64) ln -sv lib /lib64 && ln -sv lib /usr/lib64 ;;
+esac
+
+mkdir -v /var/{log,mail,spool}
+ln -sv /run /var/run
+ln -sv /run/lock /var/lock
+mkdir -pv /var/{opt,cache,lib/{misc,locate},local}
+
+# symlinks
 ln -sv /tools/bin/{bash,cat,echo,pwd,stty} /bin
 ln -sv /tools/bin/perl /usr/bin
 ln -sv /tools/lib/libgcc_s.so{,.1} /usr/lib
@@ -8,8 +34,8 @@ ln -sv bash /bin/sh
 
 touch /etc/mtab
 
-# required by  perl
-echo "127.0.0.1 localhost $(hostname)" > /etc/hosts
+# required by perl
+echo "127.0.0.1 localhost" > /etc/hosts
 
 # required by udev
 install -dv /lib/{firmware,udev/devices/pts}
@@ -150,3 +176,34 @@ install uhci_hcd /sbin/modprobe ehci_hcd ; /sbin/modprobe -i uhci_hcd ; true
 
 # End /etc/modprobe.d/usb.conf
 EOF
+
+cat > /etc/sysconfig/ifconfig.eth0 << "EOF"
+ONBOOT=yes
+IFACE=eth0
+SERVICE=ipv4-static
+IP=192.168.1.1
+GATEWAY=192.168.1.2
+PREFIX=24
+BROADCAST=192.168.1.255
+EOF
+
+cat > /etc/resolv.conf << "EOF"
+# Begin /etc/resolv.conf
+
+#domain <Your Domain Name>
+#nameserver <IP address of your primary nameserver>
+#nameserver <IP address of your secondary nameserver>
+
+# End /etc/resolv.conf
+EOF
+
+cat > /etc/hosts << "EOF"
+# Begin /etc/hosts (network card version)
+
+127.0.0.1 localhost
+#<192.168.1.1> <HOSTNAME.example.org> [alias1] [alias2 ...]
+
+# End /etc/hosts (network card version)
+EOF
+
+echo "HOSTNAME=bee-lfs" > /etc/sysconfig/network
