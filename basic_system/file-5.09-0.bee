@@ -15,5 +15,5 @@ mee_build() {
 }
 
 mee_install() {
-    start_cmd DESTDIR=${D} install
+    start_cmd make DESTDIR=${D} install
 }
