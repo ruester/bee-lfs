@@ -2,7 +2,8 @@ step-by-step:
 
 * be root
 * cfdisk
-* mkfs.ext2
+* mke2fs -j
+* mkswap
 * mount target partition to /mnt/lfs
 * mkdir /mnt/lfs/tools && ln -svf /mnt/lfs/tools /tools
 * cd toolchain
@@ -13,7 +14,7 @@ tc-gcc_pass1-4.6.1-0.bee
 tc-linux-headers-3.1-0.bee
 tc-glibc-2.14.1-0.bee
 tc-adjusted-specs-1-0.bee
-tc-binutils_pas2-2.21.1a-0.bee
+tc-binutils_pass2-2.21.1a-0.bee
 tc-gcc_pass2-4.6.1-0.bee
 tc-tcl-8.5.10-0.bee
 tc-expect-5.45-0.bee

@@ -15,8 +15,6 @@ SRCURL[0]="http://ftp.gnu.org/gnu/binutils/binutils-${PKGVERSION}.tar.bz2"
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
-build_in_sourcedir
-
 # use non-default configure options..
 mee_configure() {
     start_cmd ${S}/configure \

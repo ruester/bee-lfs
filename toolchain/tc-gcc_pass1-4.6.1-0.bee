@@ -22,8 +22,6 @@ PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/gcc-4.6.1-cross_com
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
-build_in_sourcedir
-
 # before applying any patches:
 #    setup source directory..
 mee_patch_pre() {
