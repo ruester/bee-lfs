@@ -1,6 +1,6 @@
 step-by-step:
 
-* be root
+* be root and have internet access
 * cfdisk
 * mke2fs -j
 * mkswap
