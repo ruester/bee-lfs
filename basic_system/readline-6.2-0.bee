@@ -1,0 +1,33 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/readline-6.2.tar.gz"
+PATCHURL[0]="/usr/src/readline-6.2-fixes-1.patch"
+
+build_in_sourcedir
+
+mee_patch_pre() {
+    sed -i '/MV.*old/d' Makefile.in
+    sed -i '/{OLDSUFF}/c:' support/shlib-install
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr --libdir=/lib
+}
+
+mee_build() {
+    start_cmd make -j $CPUS SHLIB_LIBS=-lncurses
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/usr/lib
+    mv -v ${D}/lib/lib{readline,history}.a ${D}/usr/lib
+    rm -v ${D}/lib/lib{readline,history}.so
+    ln -sfv ../../lib/libreadline.so.6 ${D}/usr/lib/libreadline.so
+    ln -sfv ../../lib/libhistory.so.6 ${D}/usr/lib/libhistory.so
+}
