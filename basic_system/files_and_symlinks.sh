@@ -26,7 +26,7 @@ ln -sv /run/lock /var/lock
 mkdir -pv /var/{opt,cache,lib/{misc,locate},local}
 
 # symlinks
-ln -sv /tools/bin/{bash,cat,echo,pwd,stty} /bin
+ln -sv /tools/bin/{bash,cat,echo,pwd,stty,env} /bin
 ln -sv /tools/bin/perl /usr/bin
 ln -sv /tools/lib/libgcc_s.so{,.1} /usr/lib
 ln -sv /tools/lib/libstdc++.so{,.6} /usr/lib

@@ -1,12 +1,4 @@
-#!/tools/bin/env beesh
-#
-# this file is part of bee-lfs v7.0
-#  by Marius Tolzmann <marius@mariux.de> 2011
-#
-# this is the bee-file for binutils pass1
-# see LFS 7.0 chapter 6: 6.5
-# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/binutils-pass1.html
-#
+#!/bin/env beesh
 require_version 1.0_rc17
 
 PREFIX=ignore
