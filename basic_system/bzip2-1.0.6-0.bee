@@ -1,0 +1,36 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/bzip2-1.0.6.tar.gz"
+PATCHURL[0]="/usr/src/bzip2-1.0.6-install_docs-1.patch"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile
+}
+
+mee_configure() {
+    start_cmd make -j $CPUS -f Makefile-libbz2_so
+    start_cmd make clean
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make PREFIX=${D}/usr install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/{bin,lib}
+
+    cp -v ${S}/bzip2-shared ${D}/bin/bzip2
+    cp -av ${S}/libbz2.so* ${D}/lib
+    ln -sv ../../lib/libbz2.so.1.0 ${D}/usr/lib/libbz2.so
+    rm -v ${D}/usr/bin/{bunzip2,bzcat,bzip2}
+    ln -sv bzip2 ${D}/bin/bunzip2
+    ln -sv bzip2 ${D}/bin/bzcat
+}
