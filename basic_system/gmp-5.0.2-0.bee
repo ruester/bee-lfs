@@ -1,0 +1,23 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/gmp-5.0.2.tar.bz2"
+
+build_in_sourcedir
+
+mee_patch_pre() {
+    sed -i 's/np + dn, qn/& - dn/' mpn/generic/dcpi1_bdiv_q.c
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr --enable-cxx --enable-mpbsd
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
