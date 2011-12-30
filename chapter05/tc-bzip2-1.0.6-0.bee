@@ -8,21 +8,21 @@
 # see LFS 7.0 chapter 5: 5.17
 # http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/bzip2.html
 #
-require_version ${PKGVERSION[2]}_rc17
+require_version 1.0_rc17
 
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 SRCURL[0]="http://www.bzip.org/${PKGVERSION}/bzip2-${PKGVERSION}.tar.gz"
-
 PATCHURL[0]=""
-
-# set LFS_TGT if not set..
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
-
-# set PREFIX to LFS_PREFIX (default: /tools)
 PREFIX=${LFS_PREFIX=/tools}
-
-# set explicit PATH
 export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+build_in_sourcedir
 
 mee_install() {
     start_cmd make PREFIX=${D}/${PREFIX} install
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
 }

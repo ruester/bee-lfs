@@ -10,22 +10,19 @@
 #
 require_version 1.0_rc17
 
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 SRCURL[0]="http://sourceforge.net/projects/check/files/check/${PKGVERSION}/check-${PKGVERSION}.tar.gz"
-
-# set LFS_TGT if not set..
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
-
-# set PREFIX to LFS_PREFIX (default: /tools)
 PREFIX=${LFS_PREFIX=/tools}
-
-# set explicit PATH
 export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+build_in_sourcedir
 
 mee_configure() {
     start_cmd ${S}/configure \
         --prefix=${PREFIX}
 }
 
-mee_build_post() {
-    start_cmd make check
+mee_build() {
+    start_cmd make -j $CPUS
 }
