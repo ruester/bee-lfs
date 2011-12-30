@@ -1,6 +1,7 @@
 step-by-step:
 
 * be root and have internet access
+* copy a bee tarball (at least version 1.0_rc17) to /usr/src/bee.tar
 * cfdisk
 * mke2fs -j
 * mkswap
