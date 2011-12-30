@@ -1,0 +1,37 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/udev-173.tar.bz2"
+SRCURL[1]="/usr/src/udev-config-20100128.tar.bz2"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i -e '/deprecated/d' udev/udevadm-trigger.c
+    tar -xvf ${F}/udev-config-20100128.tar.bz2
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr \
+        --sysconfdir=/etc --sbindir=/sbin \
+        --with-rootlibdir=/lib --libexecdir=/lib/udev \
+        --disable-hwdb --disable-introspection \
+        --disable-keymap --disable-gudev
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
+mee_install_post() {
+    rmdir -v ${D}/usr/share/doc/udev
+
+    cd ${S}/udev-config-20100128
+    make DESTDIR=${D} install
+    make DESTDIR=${D} install-doc
+}

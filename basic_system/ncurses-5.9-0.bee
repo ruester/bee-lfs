@@ -1,0 +1,42 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/ncurses-5.9.tar.gz"
+
+build_in_sourcedir
+
+mee_configure() {
+    ./configure --prefix=/usr \
+        --with-shared \
+        --without-debug \
+        --enable-widec
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/lib
+
+    mv -v ${D}/usr/lib/libncursesw.so.5* ${D}/lib
+    ln -sfv ../../lib/libncursesw.so.5 ${D}/usr/lib/libncursesw.so
+
+    for lib in ncurses form panel menu ; do \
+        rm -vf ${D}/usr/lib/lib${lib}.so ; \
+        echo "INPUT(-l${lib}w)" >${D}/usr/lib/lib${lib}.so ; \
+        ln -sfv lib${lib}w.a ${D}/usr/lib/lib${lib}.a ; \
+    done
+
+    ln -sfv libncurses++w.a ${D}/usr/lib/libncurses++.a
+    rm -vf ${D}/usr/lib/libcursesw.so
+    echo "INPUT(-lncursesw)" >${D}/usr/lib/libcursesw.so
+    ln -sfv libncurses.so ${D}/usr/lib/libcurses.so
+    ln -sfv libncursesw.a ${D}/usr/lib/libcursesw.a
+    ln -sfv libncurses.a ${D}/usr/lib/libcurses.a
+}

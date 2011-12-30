@@ -1,0 +1,31 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/perl-5.14.2.tar.bz2"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i -e "s|BUILD_ZLIB\s*= True|BUILD_ZLIB = False|"           \
+           -e "s|INCLUDE\s*= ./zlib-src|INCLUDE    = /usr/include|" \
+           -e "s|LIB\s*= ./zlib-src|LIB        = /usr/lib|"         \
+        cpan/Compress-Raw-Zlib/config.in
+}
+
+mee_configure() {
+    sh ${S}/Configure -des -Dprefix=/usr \
+        -Dvendorprefix=/usr           \
+        -Dman1dir=/usr/share/man/man1 \
+        -Dman3dir=/usr/share/man/man3 \
+        -Dpager="/usr/bin/less -isR"  \
+        -Duseshrplib
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}

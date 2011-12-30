@@ -1,0 +1,54 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#
+# this is the bee-file for binutils pass1
+# see LFS 7.0 chapter 6: 6.5
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/binutils-pass1.html
+#
+require_version 1.0_rc17
+
+LFS=/mnt/lfs
+PREFIX=/
+
+mee_fetch() {
+    true
+}
+
+mee_configure() {
+    true
+}
+
+mee_build() {
+    true
+}
+
+mee_install() {
+    TARGET=${D}/${LFS}
+
+    mkdir -pv ${TARGET}
+    mkdir -pv ${TARGET}/{bin,boot,etc/{opt,sysconfig},home,lib,mnt,opt,run}
+    mkdir -pv ${TAREGT}/{media/{floppy,cdrom},sbin,srv,var}
+
+    install -dv -m 0750 ${TARGET}/root
+    install -dv -m 1777 ${TARGET}/tmp ${TARGET}/var/tmp
+
+    mkdir -pv ${TARGET}/usr/{,local/}{bin,include,lib,sbin,src}
+    mkdir -pv ${TARGET}/usr/{,local/}share/{doc,info,locale,man}
+    mkdir -v  ${TARGET}/usr/{,local/}share/{misc,terminfo,zoneinfo}
+    mkdir -pv ${TARGET}/usr/{,local/}share/man/man{1..8}
+
+    for dir in ${TARGET}/usr ${TARGET}/usr/local; do
+        ln -sv share/{man,doc,info} $dir
+    done
+
+    case $(uname -m) in
+        x86_64) ln -sv lib ${TARGET}/lib64 && ln -sv lib ${TARGET}/usr/lib64 ;;
+    esac
+
+    mkdir -v ${TARGET}/var/{log,mail,spool}
+    ln -sv /run ${TARGET}/var/run
+    ln -sv /run/lock ${TARGET}/var/lock
+    mkdir -pv ${TARGET}/var/{opt,cache,lib/{misc,locate},local}
+}

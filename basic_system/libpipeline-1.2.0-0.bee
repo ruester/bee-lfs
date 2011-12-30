@@ -1,0 +1,20 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/libpipeline-1.2.0.tar.gz"
+
+build_in_sourcedir
+
+mee_configure() {
+    ${S}/configure CHECK_CFLAGS=-I/tools/include \
+        CHECK_LIBS="-L/tools/lib -lcheck" --prefix=/usr
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}

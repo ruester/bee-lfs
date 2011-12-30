@@ -1,0 +1,35 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/linux-3.1.tar.bz2"
+
+build_in_sourcedir
+
+mee_configure() {
+    true
+}
+
+mee_build_pre() {
+    start_cmd make mrproper
+    start_cmd make -j $CPUS LC_ALL= LANG=$LC_ALL menuconfig
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} modules_install
+}
+
+mee_install_post() {
+    mkdir -v ${D}/boot
+
+    cp -v ${S}/arch/x86/boot/bzImage ${D}/boot/vmlinuz-3.1-lfs-7.0
+    cp -v ${S}/System.map ${D}/boot/System.map-3.1
+    cp -v ${S}/.config ${D}/boot/config-3.1
+
+    install -d ${D}/usr/share/doc/linux-3.1
+    cp -r ${S}/Documentation/* ${D}/usr/share/doc/linux-3.1
+}

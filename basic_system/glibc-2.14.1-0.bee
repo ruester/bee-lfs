@@ -1,0 +1,43 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/glibc-2.14.1.tar.bz2"
+PATCHURL[0]="/usr/src/glibc-2.14.1-fixes-1.patch"
+PATCHURL[1]="/usr/src/glibc-2.14.1-gcc_fix-1.patch"
+
+mee_patch_pre() {
+    DL=$(readelf -l /bin/sh | sed -n 's@.*interpret.*/tools\(.*\)]$@\1@p')
+    sed -i "s|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=$DL -o|" \
+        scripts/test-installation.pl
+    unset DL
+
+    sed -i -e 's/"db1"/& \&\& $name ne "nss_test1"/' scripts/test-installation.pl
+    sed -i 's|@BASH@|/bin/bash|' elf/ldd.bash.in
+}
+
+mee_patch_post() {
+    sed -i '195,213 s/PRIVATE_FUTEX/FUTEX_CLOCK_REALTIME/' \
+        nptl/sysdeps/unix/sysv/linux/x86_64/pthread_rwlock_timed{rd,wr}lock.S
+}
+
+mee_configure_pre() {
+    case `uname -m` in
+        i?86) echo "CFLAGS += -march=i486 -mtune=native -O3 -pipe" > configparms ;;
+    esac
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr \
+        --disable-profile --enable-add-ons \
+        --enable-kernel=2.6.25 --libexecdir=/usr/lib/glibc
+}
+
+mee_build() {
+    make -j $CPUS
+}
+
+mee_install() {
+    make install_root=${D} install
+    make install_root=${D} localedata/install-locales
+}

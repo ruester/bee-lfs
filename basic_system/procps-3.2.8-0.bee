@@ -1,0 +1,21 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/procps-3.2.8.tar.gz"
+PATCHURL[0]="/usr/src/procps-3.2.8-fix_HZ_errors-1.patch"
+PATCHURL[1]="/usr/src/procps-3.2.8-watch_unicode-1.patch"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i -e 's@\*/module.mk@proc/module.mk ps/module.mk@' Makefile
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
