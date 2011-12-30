@@ -2,6 +2,7 @@
 
 LFS=/mnt/lfs
 
+mkdir -pv $LFS/root
 cp -vfr $(pwd) $LFS/root
 
 chroot "$LFS" /tools/bin/env -i \
