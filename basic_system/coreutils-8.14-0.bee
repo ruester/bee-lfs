@@ -1,0 +1,40 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/coreutils-8.14.tar.xz"
+PATCHURL[0]="/usr/src/coreutils-8.14-uname-1.patch"
+PATCHURL[1]="/usr/src/coreutils-8.14-i18n-1.patch"
+
+build_in_sourcedir
+
+mee_patch() {
+    case `uname -m` in
+        i?86 | x86_64) patch -Np1 -i ${F}/coreutils-8.14-uname-1.patch ;;
+    esac
+    patch -Np1 -i ${F}/coreutils-8.14-i18n-1.patch
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr \
+        --enable-no-install-program=kill,uptime
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/{bin,usr/share/man/man8}
+    mv -v ${D}/usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} ${D}/bin
+    mv -v ${D}/usr/bin/{false,ln,ls,mkdir,mknod,mv,pwd,rm} ${D}/bin
+    mv -v ${D}/usr/bin/{rmdir,stty,sync,true,uname} ${D}/bin
+    mv -v ${D}/usr/bin/chroot ${D}/usr/sbin
+    mv -v ${D}/usr/share/man/man1/chroot.1 ${D}/usr/share/man/man8/chroot.8
+    sed -i s/\"1\"/\"8\"/1 ${D}/usr/share/man/man8/chroot.8
+    mv -v ${D}/usr/bin/{head,sleep,nice} ${D}/bin
+}
