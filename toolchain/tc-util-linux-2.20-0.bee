@@ -1,0 +1,23 @@
+#!/bin/env beesh
+
+require_version 1.0_rc17
+
+SRCURL[0]="http://anduin.linuxfromscratch.org/sources/LFS/lfs-packages/conglomeration/util-linux/util-linux-${PKGVERSION}.tar.bz2"
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+PREFIX=${LFS_PREFIX=/tools}
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+build_in_sourcedir
+
+mee_configure() {
+    start_cmd ${S}/configure --enable-arch --prefix=/tools
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
