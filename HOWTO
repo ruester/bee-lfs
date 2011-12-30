@@ -1,0 +1,129 @@
+step-by-step:
+
+* be root
+* cfdisk
+* mkfs.ext2
+* mount target partition to /mnt/lfs
+* mkdir /mnt/lfs/tools && ln -svf /mnt/lfs/tools /tools
+* cd toolchain
+* build toolchain: execute each bee file and install it
+(XXX.bee --no-archive-build && bee install XXX)
+tc-binutils_pass1-2.21.1a-0.bee
+tc-gcc_pass1-4.6.1-0.bee
+tc-linux-headers-3.1-0.bee
+tc-glibc-2.14.1-0.bee
+tc-adjusted-specs-1-0.bee
+tc-binutils_pas2-2.21.1a-0.bee
+tc-gcc_pass2-4.6.1-0.bee
+tc-tcl-8.5.10-0.bee
+tc-expect-5.45-0.bee
+tc-dejagnu-1.5-0.bee
+tc-check-0.9.8-0.bee
+tc-ncurses-5.9-0.bee
+tc-bash-4.2-0.bee
+tc-bzip2-1.0.6-0.bee
+tc-coreutils-8.14-0.bee
+tc-diffutils-3.2-0.bee
+tc-file-5.09-0.bee
+tc-findutils-4.4.2-0.bee
+tc-gawk-4.0.0-0.bee
+tc-gettext-0.18.1.1-0.bee
+tc-grep-2.9-0.bee
+tc-gzip-1.4-0.bee
+tc-m4-1.4.16-0.bee
+tc-make-3.82-0.bee
+tc-patch-2.6.1-0.bee
+tc-perl-5.14.2-0.bee
+tc-sed-4.2.1-0.bee
+tc-tar-1.26-0.bee
+tc-texinfo-4.13a-0.bee
+tc-xz-5.0.3-0.bee
+tc-util-linux-2.20-0.bee
+tc-bee-1.0-0.bee (installing into /tools)
+
+* run the scripts to enter the chroot environment:
+cd ../basic_system
+prepare_vkfs.sh
+lfs-fhs-1-0.bee && install lfs-fhs
+downloading.sh
+entering_chroot.sh
+
+* build basic system by running the bee files:
+(again: ./XXX.bee --no-archive-build && bee install XXX)
+cd ~/basic_system
+files_and_symlinks.sh
+exec /tools/bin/bash --login +h
+bee-1.0-0.bee (using /tools/bin/bee and installing in /usr)
+bee-1.0-0.bee (using /usr/bin/bee and installing in /usr -> "bootstrap")
+fhs-1.0-0.bee
+linux-headers-3.1-0.bee
+glibc-2.14.1-0.bee
+configuring_glibc.sh
+readjusting_toolchain.sh
+zlib-1.2.5-0.bee
+file-5.09-0.bee
+binutils-2.21.1a-0.bee
+gmp-5.0.2-0.bee
+mpfr-3.1.0-0.bee
+mpc-0.9-0.bee
+gcc-4.6.1-0.bee
+sed-4.2.1-0.bee
+bzip2-1.0.6-0.bee
+ncurses-5.9-0.bee
+e2fsprogs-1.41.14-0.bee
+coreutils-8.14-0.bee
+iana-etc-2.30-0.bee
+m4-1.4.16-0.bee
+bison-2.5-0.bee
+procps-3.2.8-0.bee
+grep-2.9-0.bee
+readline-6.2-0.bee
+bash-4.2-0.bee
+exec /bin/bash --login +h
+libtool-2.4-0.bee
+gdbm-1.9.1-0.bee
+inetutils-1.8-0.bee
+perl5.14.2-0.bee
+autoconf-2.68-0.bee
+automake-1.11.1-0.bee
+diffutils-3.2-0.bee
+gawk-4.0.0-0.bee
+findutils-4.4.2-0.bee
+flex-2.5.35-0.bee
+gettext-0.18.1.1-0.bee
+groff-1.21-0.bee
+grub-1.99-0.bee
+gzip-1.4-0.bee
+kbd-1.15.2-0.bee
+less-444-0.bee
+libpipeline-1.2.0-0.bee
+make-3.82-0.bee
+xz-5.0.3-0.bee
+man-db-2.6.0.2-0.bee
+module-init-tools-3.16-0.bee
+patch-2.6.1-0.bee
+psmisc-22.14-0.bee
+shadow-4.1.4.3-0.bee
+sysklogd-1.5-0.bee
+sysvinit-2.88dsf-0.bee
+tar-1.26-0.bee
+texinfo-4.13a-0.bee
+udev-173-0.bee
+vim-7.3-0.bee
+nano-2.2.6-0.bee
+general_network_config.sh
+
+* configure shadow:
+pwvonc
+grpconv
+sed -i 's/yes/no/' /etc/default/useradd
+passwd root
+
+* make the system bootable:
+logout
+reenter_chroot.sh
+cd ~/making_bootable
+lfs-bootscripts-20111017-0.bee
+modify /etc/fstab
+build kernel: linux-3.1-0.bee
+make bootable with grub
