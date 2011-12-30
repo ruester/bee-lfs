@@ -6,10 +6,14 @@ CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
-SRCURL[0]="/usr/src/bee-git.tar"
+SRCURL[0]="/usr/src/bee.tar"
 PATCHURL[0]=""
 
 build_in_sourcedir
+
+mee_configure() {
+    true
+}
 
 mee_build() {
     true
