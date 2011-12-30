@@ -1,0 +1,25 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/man-db-2.6.0.2.tar.gz"
+
+build_in_sourcedir
+
+mee_configure() {
+    PKG_CONFIG=/tools/bin/true \
+        libpipeline_CFLAGS='' \
+        libpipeline_LIBS='-lpipeline' \
+        ${S}/configure --prefix=/usr --libexecdir=/usr/lib \
+            --docdir=/usr/share/doc/man-db-2.6.0.2 --sysconfdir=/etc \
+            --disable-setuid --with-browser=/usr/bin/lynx \
+            --with-vgrind=/usr/bin/vgrind --with-grap=/usr/bin/grap
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
