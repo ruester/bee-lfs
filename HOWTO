@@ -12,16 +12,15 @@ step-by-step:
 
 * run the scripts to enter the chroot environment:
 cd ../basic_system
-prepare_vkfs.sh
-lfs-fhs-1-0.bee && install lfs-fhs
 downloading.sh
+prepare_vkfs.sh
 entering_chroot.sh
-
-* build basic system by running the bee files:
-(again: ./XXX.bee --no-archive-build && bee install XXX)
 cd ~/basic_system
 files_and_symlinks.sh
 exec /tools/bin/bash --login +h
+
+* build basic system by running the bee files:
+(again: ./XXX.bee --no-archive-build && bee install XXX)
 bee-1.0-0.bee (using /tools/bin/bee and installing in /usr)
 bee-1.0-0.bee (using /usr/bin/bee and installing in /usr -> "bootstrap")
 fhs-1.0-0.bee
@@ -48,7 +47,6 @@ procps-3.2.8-0.bee
 grep-2.9-0.bee
 readline-6.2-0.bee
 bash-4.2-0.bee
-exec /bin/bash --login +h
 libtool-2.4-0.bee
 gdbm-1.9.1-0.bee
 inetutils-1.8-0.bee
@@ -80,7 +78,6 @@ texinfo-4.13a-0.bee
 udev-173-0.bee
 vim-7.3-0.bee
 nano-2.2.6-0.bee
-general_network_config.sh
 
 * configure shadow:
 pwvonc
