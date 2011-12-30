@@ -1,0 +1,32 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/binutils-2.21.1a.tar.bz2"
+
+mee_patch_pre() {
+    if [ $(expect -c "spawn ls") != "spawn ls" ]; then
+        false
+    fi
+
+    rm -fv etc/standards.info
+    sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
+    sed -i "/exception_defines.h/d" ld/testsuite/ld-elf/new.cc
+    sed -i "s/-fvtable-gc //" ld/testsuite/ld-selective/selective.exp
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr --enable-shared
+}
+
+mee_build() {
+    make tooldir=/usr -j $CPUS
+}
+
+mee_install() {
+    make tooldir=/usr DESTDIR=${D} install
+}
+
+mee_install_post() {
+    cp -v ${S}/include/libiberty.h ${D}/usr/include
+}
