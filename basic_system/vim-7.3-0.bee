@@ -1,0 +1,49 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/vim-7.3.tar.bz2"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr --enable-multibyte
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/etc
+    mkdir -pv ${D}/usr/share/doc
+
+    ln -sv vim ${D}/usr/bin/vi
+
+    for L in  ${D}/usr/share/man/{,*/}man1/vim.1; do
+        ln -sv vim.1 $(dirname $L)/vi.1
+    done
+
+    ln -sv ../vim/vim73/doc ${D}/usr/share/doc/vim-7.3
+
+    cat > ${D}/etc/vimrc << "EOF"
+" Begin /etc/vimrc
+
+set nocompatible
+set backspace=2
+syntax on
+if (&term == "iterm") || (&term == "putty")
+  set background=dark
+endif
+
+" End /etc/vimrc
+EOF
+}
