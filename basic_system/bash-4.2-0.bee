@@ -1,0 +1,22 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/bash-4.2.tar.gz"
+PATCHURL[0]="/usr/src/bash-4.2-fixes-3.patch"
+
+build_in_sourcedir
+
+mee_configure() {
+    ${S}/configure --prefix=/usr --bindir=/bin \
+        --htmldir=/usr/share/doc/bash-4.2 --without-bash-malloc \
+        --with-installed-readline
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
