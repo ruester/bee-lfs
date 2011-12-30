@@ -1,0 +1,37 @@
+#!/tools/bin/env beesh
+require_version 1.0_rc17
+
+CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+SRCURL[0]="/usr/src/gcc-4.6.1.tar.bz2"
+PATCHURL[0]="/usr/src/gcc-4.6.1-locale-1.patch"
+
+mee_patch_pre() {
+    sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
+    case `uname -m` in
+        i?86) sed -i 's/^T_CFLAGS =$/& -fomit-frame-pointer/' \
+            gcc/Makefile.in ;;
+    esac
+    sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+}
+
+mee_configure() {
+    ${S}/configure --prefix=/usr \
+        --libexecdir=/usr/lib --enable-shared \
+        --enable-threads=posix --enable-__cxa_atexit \
+        --enable-clocale=gnu --enable-languages=c,c++ \
+        --disable-multilib --disable-bootstrap --with-system-zlib
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/lib
+    ln -sv ../usr/bin/cpp ${D}/lib
+    ln -sv gcc ${D}/usr/bin/cc
+}
