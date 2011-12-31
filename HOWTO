@@ -8,8 +8,7 @@ step-by-step:
 * mount target partition to /mnt/lfs
 * mkdir /mnt/lfs/tools && ln -svf /mnt/lfs/tools /tools
 * cd toolchain
-* build the toolchain: execute the script build_toolchain.sh
-
+* build the toolchain by running the script build_toolchain.sh
 * run the scripts to enter the chroot environment:
 cd ../basic_system
 downloading.sh
@@ -18,78 +17,18 @@ entering_chroot.sh
 cd ~/basic_system
 files_and_symlinks.sh
 exec /tools/bin/bash --login +h
-
-* build basic system by running the bee files:
-(again: ./XXX.bee --no-archive-build && bee install XXX)
-bee-1.0-0.bee (using /tools/bin/bee and installing in /usr)
-bee-1.0-0.bee (using /usr/bin/bee and installing in /usr -> "bootstrap")
-fhs-1.0-0.bee
-linux-headers-3.1-0.bee
-glibc-2.14.1-0.bee
-configuring_glibc.sh
-readjusting_toolchain.sh
-zlib-1.2.5-0.bee
-file-5.09-0.bee
-binutils-2.21.1a-0.bee
-gmp-5.0.2-0.bee
-mpfr-3.1.0-0.bee
-mpc-0.9-0.bee
-gcc-4.6.1-0.bee
-sed-4.2.1-0.bee
-bzip2-1.0.6-0.bee
-ncurses-5.9-0.bee
-e2fsprogs-1.41.14-0.bee
-coreutils-8.14-0.bee
-iana-etc-2.30-0.bee
-m4-1.4.16-0.bee
-bison-2.5-0.bee
-procps-3.2.8-0.bee
-grep-2.9-0.bee
-readline-6.2-0.bee
-bash-4.2-0.bee
-libtool-2.4-0.bee
-gdbm-1.9.1-0.bee
-inetutils-1.8-0.bee
-perl5.14.2-0.bee
-autoconf-2.68-0.bee
-automake-1.11.1-0.bee
-diffutils-3.2-0.bee
-gawk-4.0.0-0.bee
-findutils-4.4.2-0.bee
-flex-2.5.35-0.bee
-gettext-0.18.1.1-0.bee
-groff-1.21-0.bee
-grub-1.99-0.bee
-gzip-1.4-0.bee
-kbd-1.15.2-0.bee
-less-444-0.bee
-libpipeline-1.2.0-0.bee
-make-3.82-0.bee
-xz-5.0.3-0.bee
-man-db-2.6.0.2-0.bee
-module-init-tools-3.16-0.bee
-patch-2.6.1-0.bee
-psmisc-22.14-0.bee
-shadow-4.1.4.3-0.bee
-sysklogd-1.5-0.bee
-sysvinit-2.88dsf-0.bee
-tar-1.26-0.bee
-texinfo-4.13a-0.bee
-udev-173-0.bee
-vim-7.3-0.bee
-nano-2.2.6-0.bee
-
-* configure shadow:
+* build the basic system by running the script build_basic_system.sh
+* configure shadow and set a password:
 pwvonc
 grpconv
 sed -i 's/yes/no/' /etc/default/useradd
 passwd root
-
-* make the system bootable:
 logout
 reenter_chroot.sh
 cd ~/making_bootable
-lfs-bootscripts-20111017-0.bee
-modify /etc/fstab
-build kernel: linux-3.1-0.bee
-make bootable with grub
+* install bootscripts:
+lfs-bootscripts-20111017-0.bee && bee install lfs-bootscripts
+* customize /etc/fstab
+* build the kernel:
+linux-3.1-0.bee && bee install linux
+* install a boatloader and thus make the system bootable
