@@ -10,7 +10,7 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+CPUS=$(grep -c processor /proc/cpuinfo)
 SRCURL[0]="http://ftp.gnu.org/gnu/glibc/glibc-${PKGVERSION}.tar.bz2"
 PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/glibc-2.14.1-gcc_fix-1.patch"
 PATCHURL[1]="http://www.linuxfromscratch.org/patches/lfs/7.0/glibc-2.14.1-cpuid-1.patch"

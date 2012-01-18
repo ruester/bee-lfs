@@ -10,7 +10,7 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+CPUS=$(grep -c processor /proc/cpuinfo)
 SRCURL[0]="http://ftp.gnu.org/gnu/gzip/gzip-${PKGVERSION}.tar.gz"
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}

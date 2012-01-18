@@ -10,7 +10,7 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+CPUS=$(grep -c processor /proc/cpuinfo)
 SRCURL[0]="ftp://ftp.gnu.org/gnu/ncurses/ncurses-${PKGVERSION}.tar.gz"
 PATCHURL[0]=""
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}

@@ -10,7 +10,7 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(cat /proc/cpuinfo | grep processor | wc -l)
+CPUS=$(grep -c processor /proc/cpuinfo)
 MPFR_VERSION=3.1.0
 GMP_VERSION=5.0.2
 MPC_VERSION=0.9
