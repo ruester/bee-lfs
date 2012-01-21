@@ -33,6 +33,12 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
+mee_install_pre() {
+    case $(uname -m) in
+        x86_64) mkdir -pv ${D}/${PREFIX}/lib && ln -sv lib ${D}/${PREFIX}/lib64 ;;
+    esac
+}
+
 mee_install() {
     start_cmd make DESTDIR=${D} install
 }
