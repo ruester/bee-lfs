@@ -28,5 +28,7 @@ mee_build() {
 
 mee_install() {
     # install into bee specific destination
-    start_cmd make INSTALL_HDR_PATH=${D}/${PREFIX} headers_install
+    start_cmd make INSTALL_HDR_PATH=dest headers_install
+    mkdir -pv ${D}/${PREFIX}/include
+    cp -vr dest/include/* ${D}/${PREFIX}/include
 }
