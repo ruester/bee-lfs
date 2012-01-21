@@ -31,3 +31,7 @@ mee_configure() {
 mee_build() {
     start_cmd make -j $CPUS
 }
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}

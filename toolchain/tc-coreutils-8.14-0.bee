@@ -28,6 +28,10 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
 mee_install_post() {
     start_cmd cp -v src/su ${D}/tools/bin/su-tools
 }

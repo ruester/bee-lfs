@@ -33,6 +33,10 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
 # preparing the linker
 mee_install_post() {
     make -C ld clean

@@ -35,3 +35,7 @@ mee_install_pre() {
         start_cmd ln -sv lib ${D}/${PREFIX}/lib64
     fi
 }
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}

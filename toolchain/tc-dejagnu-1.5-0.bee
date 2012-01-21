@@ -26,3 +26,7 @@ mee_configure() {
 mee_build() {
     true
 }
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}

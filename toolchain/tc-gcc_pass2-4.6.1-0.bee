@@ -91,6 +91,10 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
 # after installing set link to cc
 mee_install_post() {
      start_cmd ln -vs gcc ${D}/${PREFIX}/bin/cc
