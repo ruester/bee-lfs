@@ -62,6 +62,10 @@ mee_build() {
     start_cmd make -j $CPUS
 }
 
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
+
 # after installing: fix a link
 mee_install_post() {
      gcc=${D}/${PREFIX}/bin/${LFS_TGT}-gcc
