@@ -6,7 +6,7 @@ CPUS=$(grep -c processor /proc/cpuinfo)
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
-SRCURL[0]="/usr/src/bee.tar"
+SRCURL[0]="https://github.com/mariux/bee/tarball/bee-${PKGVERSION}_${PKGEXTRAVERSION}"
 PATCHURL[0]=""
 
 build_in_sourcedir
