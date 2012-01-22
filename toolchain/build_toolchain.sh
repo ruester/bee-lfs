@@ -33,7 +33,7 @@ for i in tc-binutils_pass1-2.21.1a-0 \
     tc-texinfo-4.13a-0 \
     tc-xz-5.0.3-0 \
     tc-util-linux-2.20-0 \
-    tc-bee-1.0-0; do
+    tc-bee-1.0_rc21-0; do
 
     if [ "$(bee list -i ${i}.${ARCH} | wc -l)" == "0" ] ; then
         ./${i}.bee --no-archive-build -c
