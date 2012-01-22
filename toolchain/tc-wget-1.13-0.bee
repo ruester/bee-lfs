@@ -1,0 +1,33 @@
+#!/usr/bin/env beesh
+#
+# this file is part of bee-lfs v7.0
+#  by Marius Tolzmann <marius@mariux.de> 2011
+#     Tobias Dreyer <tewdreyer@gmail.com> 2011
+#
+# this is the bee-file for make
+# see LFS 7.0 chapter 5: 5.27
+# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/make.html
+#
+require_version 1.0_rc17
+
+CPUS=$(grep -c processor /proc/cpuinfo)
+SRCURL[0]="http://ftp.gnu.org/gnu/wget/wget-${PKGVERSION}.tar.gz"
+: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+PREFIX=${LFS_PREFIX=/tools}
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+build_in_sourcedir
+
+mee_configure() {
+    start_cmd ${S}/configure \
+        --prefix=${PREFIX} \
+        --without-ssl
+}
+
+mee_build() {
+    start_cmd make -j $CPUS
+}
+
+mee_install() {
+    start_cmd make DESTDIR=${D} install
+}
