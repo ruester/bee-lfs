@@ -10,29 +10,31 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="http://prdownloads.sourceforge.net/tcl/tcl${PKGVERSION}-src.tar.gz"
-: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/mnt/lfs/sources
+SRCURL[0]="${SRCDIR}/tcl${PKGVERSION}-src.tar.gz"
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 build_in_sourcedir
 
 mee_configure() {
-    start_cmd ${S}/unix/configure \
-        --prefix=${PREFIX}
+    cd ${S}/unix
+    start_cmd ./configure --prefix=/tools
 }
 
 mee_build() {
-    start_cmd make -j $CPUS
+    cd ${S}/unix
+    start_cmd make ${BEE_MAKEFLAGS}
 }
 
 mee_install() {
-    start_cmd make install DESTDIR=${D}
-    chmod -v u+w ${D}/${PREFIX}/lib/libtcl8.5.so
-    start_cmd make install-private-headers
+    cd ${S}/unix
+    start_cmd make ${BEE_MAKEFAGS} DESTDIR=${D} \
+                   install install-private-headers
 }
 
 mee_install_post() {
+    chmod -v u+w ${D}/${PREFIX}/lib/libtcl8.5.so
     ln -sv tclsh8.5 ${D}/${PREFIX}/bin/tclsh
 }
