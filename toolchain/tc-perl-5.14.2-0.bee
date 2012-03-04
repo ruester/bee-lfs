@@ -10,10 +10,10 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="http://www.cpan.org/src/5.0/perl-${PKGVERSION}.tar.bz2"
-PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/perl-5.14.2-libc-1.patch"
-: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/mnt/lfs/sources
+SRCURL[0]="${SRCDIR}/perl-${PKGVERSION}.tar.bz2"
+PATCHURL[0]="${SRCDIR}/perl-5.14.2-libc-1.patch"
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
@@ -24,7 +24,7 @@ mee_configure() {
 }
 
 mee_build() {
-    start_cmd make -j $CPUS
+    start_cmd make ${BEE_MAKEFLAGS}
 }
 
 mee_install() {
