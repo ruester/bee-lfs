@@ -10,9 +10,9 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="http://ftp.gnu.org/gnu/gettext/gettext-${PKGVERSION}.tar.gz"
-: ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/mnt/lfs/sources
+SRCURL[0]="${SRCDIR}/gettext-${PKGVERSION}.tar.gz"
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
@@ -25,8 +25,8 @@ mee_configure() {
 }
 
 mee_build() {
-    start_cmd make -j $CPUS -C gnulib-lib
-    start_cmd make -j $CPUS -C src msgfmt
+    bee_build -C gnulib-lib
+    bee_build -j $CPUS -C src msgfmt
 }
 
 mee_install() {
