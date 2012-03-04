@@ -10,22 +10,23 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/mnt/lfs/sources
 MPFR_VERSION=3.1.0
-GMP_VERSION=5.0.2
+GMP_VERSION=5.0.4
 MPC_VERSION=0.9
-SRCURL[0]="http://ftp.gnu.org/gnu/gcc/gcc-${PKGVERSION}/gcc-${PKGVERSION}.tar.bz2"
-SRCURL[1]="http://www.mpfr.org/mpfr-${MPFR_VERSION}/mpfr-${MPFR_VERSION}.tar.bz2"
-SRCURL[2]="http://ftp.gnu.org/gnu/gmp/gmp-${GMP_VERSION}.tar.bz2"
-SRCURL[3]="http://www.multiprecision.org/mpc/download/mpc-${MPC_VERSION}.tar.gz"
-PATCHURL[0]="http://www.linuxfromscratch.org/patches/lfs/7.0/gcc-4.6.1-startfiles_fix-1.patch"
+SRCURL[0]="${SRCDIR}/gcc-${PKGVERSION}.tar.bz2"
+SRCURL[1]="${SRCDIR}/mpfr-${MPFR_VERSION}.tar.bz2"
+SRCURL[2]="${SRCDIR}/gmp-${GMP_VERSION}.tar.xz"
+SRCURL[3]="${SRCDIR}/mpc-${MPC_VERSION}.tar.gz"
+PATCHURL[0]="${SRCDIR}/gcc-${PKGVERSION}-startfiles_fix-1.patch"
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 # before applying any patches:
 # setup source directory..
-mee_patch_pre() {
+mee_patch_post() {
     cp -v gcc/Makefile.in{,.orig}
     sed -e "s@\./fixinc\.sh@-c true@" \
         -e "s/^T_CFLAGS =$/& -fomit-frame-pointer/" \
@@ -69,8 +70,7 @@ mee_configure() {
     CC="${LFS_TGT}-gcc -B${PREFIX}/lib" \
     AR=${LFS_TGT}-ar \
     RANLIB=${LFS_TGT}-ranlib \
-    start_cmd ${S}/configure \
-      --prefix=${PREFIX} \
+    bee_configure \
       --with-local-prefix=${PREFIX} \
       --enable-clocale=gnu \
       --enable-shared \
@@ -85,20 +85,6 @@ mee_configure() {
       --without-cloog \
       --with-mpfr-include=${S}/mpfr/src \
       --with-mpfr-lib=${B}/mpfr/src/.libs
-}
-
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install_pre() {
-    case $(uname -m) in
-        x86_64) mkdir -pv ${D}/${PREFIX}/lib && ln -sv lib ${D}/${PREFIX}/lib64 ;;
-    esac
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
 }
 
 # after installing set link to cc
