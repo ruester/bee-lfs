@@ -10,8 +10,9 @@
 #
 require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="http://ftp.gnu.org/gnu/binutils/binutils-${PKGVERSION}.tar.bz2"
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/mnt/lfs/sources
+SRCURL[0]="${SRCDIR}/binutils-${PKGVERSION}.tar.bz2"
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
@@ -23,24 +24,9 @@ mee_configure() {
     CC="${LFS_TGT}-gcc -B${PREFIX}/lib" \
     AR=${LFS_TGT}-ar \
     RANLIB=${LFS_TGT}-ranlib \
-    start_cmd ${S}/configure \
-        --prefix=${PREFIX} \
+    bee_configure \
         --disable-nls \
         --with-lib-path=${PREFIX}/lib
-}
-
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install_pre() {
-    case $(uname -m) in
-        x86_64) mkdir -pv ${D}/${PREFIX}/lib && ln -sv lib ${D}/${PREFIX}/lib64 ;;
-    esac
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
 }
 
 # preparing the linker
