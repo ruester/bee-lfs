@@ -1,13 +1,5 @@
 #!/usr/bin/env beesh
-#
-# this file is part of bee-lfs v7.0
-#  by Marius Tolzmann <marius@mariux.de> 2011
-#     Tobias Dreyer <tewdreyer@gmail.com> 2011
-#
-# this is the bee-file for linux headers
-# see LFS 7.0 chapter 5: 5.6
-# http://www.linuxfromscratch.org/lfs/view/7.0/chapter05/linux-headers.html
-#
+
 require_version 1.0_rc17
 
 BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
