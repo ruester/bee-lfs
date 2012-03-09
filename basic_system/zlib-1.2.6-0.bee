@@ -1,0 +1,19 @@
+#!/bin/env beesh
+
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
+
+build_in_sourcedir
+
+mee_configure() {
+    start_cmd ${S}/configure --prefix=/usr
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/lib
+    mv -v ${D}/usr/lib/libz.so.* ${D}/lib
+    ln -sfv ../../lib/libz.so.${PKGVERSION} ${D}/usr/lib/libz.so
+}
