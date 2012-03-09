@@ -1,0 +1,24 @@
+#!/bin/env beesh
+
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
+
+build_in_sourcedir
+
+mee_patch_pre() {
+    sed -e 's@etc/adjtime@var/lib/hwclock/adjtime@g' \
+        -i $(grep -rl '/etc/adjtime' .)
+}
+
+mee_configure() {
+    bee_configure --enable-arch \
+        --enable-partx \
+        --enable-write
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/var/lib/hwclock
+}
