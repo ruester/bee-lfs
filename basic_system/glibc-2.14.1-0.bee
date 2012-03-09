@@ -1,10 +1,15 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/glibc-2.14.1.tar.bz2"
-PATCHURL[0]="/usr/src/glibc-2.14.1-fixes-1.patch"
-PATCHURL[1]="/usr/src/glibc-2.14.1-gcc_fix-1.patch"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-fixes-1.patch"
+PATCHURL[1]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-sort-1.patch"
+PATCHURL[2]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-gcc_fix-1.patch"
+
+LIBEXECDIR=/usr/lib/${PKGFULLNAME}
 
 mee_patch_pre() {
     DL=$(readelf -l /bin/sh | sed -n 's@.*interpret.*/tools\(.*\)]$@\1@p')
@@ -28,16 +33,18 @@ mee_configure_pre() {
 }
 
 mee_configure() {
-    ${S}/configure --prefix=/usr \
-        --disable-profile --enable-add-ons \
-        --enable-kernel=2.6.25 --libexecdir=/usr/lib/glibc
-}
-
-mee_build() {
-    make -j $CPUS
+    bee_configure --disable-profile \
+        --enable-add-ons \
+        --enable-kernel=2.6.25
 }
 
 mee_install() {
-    make install_root=${D} install
-    make install_root=${D} localedata/install-locales
+    bee_install install_root=${D} localedata/install-locales
+}
+
+mee_install_post() {
+    mkdir -p ${D}/include/{rpc,rpcsvc}
+    cp -v ${S}/sunrpc/rpc/*.h ${D}/usr/include/rpc
+    cp -v ${S}/sunrpc/rpcsvc/*.h ${D}/usr/include/rpcsvc
+    cp -v ${S}/nis/rpcsvc/*.h ${D}/usr/include/rpcsvc
 }
