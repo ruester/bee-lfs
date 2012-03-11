@@ -1,8 +1,10 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/vim-7.3.tar.bz2"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
 
 build_in_sourcedir
 
@@ -11,15 +13,7 @@ mee_patch_post() {
 }
 
 mee_configure() {
-    ${S}/configure --prefix=/usr --enable-multibyte
-}
-
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
+    bee_configure --enable-multibyte
 }
 
 mee_install_post() {
