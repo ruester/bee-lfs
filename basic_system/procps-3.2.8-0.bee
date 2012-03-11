@@ -1,10 +1,12 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/procps-3.2.8.tar.gz"
-PATCHURL[0]="/usr/src/procps-3.2.8-fix_HZ_errors-1.patch"
-PATCHURL[1]="/usr/src/procps-3.2.8-watch_unicode-1.patch"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.gz"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-fix_HZ_errors-1.patch"
+PATCHURL[1]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-watch_unicode-1.patch"
 
 build_in_sourcedir
 
@@ -12,10 +14,6 @@ mee_patch_post() {
     sed -i -e 's@\*/module.mk@proc/module.mk ps/module.mk@' Makefile
 }
 
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
+mee_configure() {
+    true
 }
