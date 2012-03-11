@@ -3,10 +3,7 @@
 LFS=/mnt/lfs
 
 mkdir -pv $LFS/root
-cp -vfr $(pwd) $LFS/root
-
-mkdir -pv $LFS/usr/src
-cp -vf /usr/src/bee.tar $LFS/usr/src
+cp -fr $(pwd) $LFS/root
 
 chroot "$LFS" /tools/bin/env -i \
     HOME=/root TERM="$TERM" PS1="\u:\w$ " \
