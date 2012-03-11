@@ -1,8 +1,10 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/sysklogd-1.5.tar.gz"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.gz"
 
 build_in_sourcedir
 
@@ -11,11 +13,11 @@ mee_configure() {
 }
 
 mee_build() {
-    start_cmd make -j $CPUS
+    start_cmd make ${BEE_MAKEFLAGS}
 }
 
 mee_install() {
-    start_cmd make prefix=${D} install
+    start_cmd make ${BEE_MAKEFLAGS} prefix=${D} install
 }
 
 mee_install_pre() {
