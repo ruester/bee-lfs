@@ -1,31 +1,24 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/coreutils-8.14.tar.xz"
-PATCHURL[0]="/usr/src/coreutils-8.14-uname-1.patch"
-PATCHURL[1]="/usr/src/coreutils-8.14-i18n-1.patch"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-uname-1.patch"
+PATCHURL[1]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-i18n-1.patch"
 
 build_in_sourcedir
 
 mee_patch() {
     case `uname -m` in
-        i?86 | x86_64) patch -Np1 -i ${F}/coreutils-8.14-uname-1.patch ;;
+        i?86 | x86_64) patch -Np1 -i ${F}/${PKGFULLNAME}-${PKGVERSION}-uname-1.patch ;;
     esac
-    patch -Np1 -i ${F}/coreutils-8.14-i18n-1.patch
+    patch -Np1 -i ${F}/${PKGFULLNAME}-${PKGVERSION}-i18n-1.patch
 }
 
 mee_configure() {
-    ${S}/configure --prefix=/usr \
-        --enable-no-install-program=kill,uptime
-}
-
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
+    bee_configure --enable-no-install-program=kill,uptime
 }
 
 mee_install_post() {
