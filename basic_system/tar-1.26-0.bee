@@ -1,20 +1,16 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/tar-1.26.tar.bz2"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
+
+LIBEXECDIR=/usr/sbin
+BINDIR=/bin
 
 build_in_sourcedir
 
 mee_configure() {
-    FORCE_UNSAFE_CONFIGURE=1 ./configure --prefix=/usr \
-        --bindir=/bin --libexecdir=/usr/sbin
-}
-
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
+    FORCE_UNSAFE_CONFIGURE=1 bee_configure
 }
