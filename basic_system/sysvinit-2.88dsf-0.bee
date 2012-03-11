@@ -1,8 +1,10 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/sysvinit-2.88dsf.tar.bz2"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
 
 build_in_sourcedir
 
@@ -19,9 +21,9 @@ mee_configure() {
 }
 
 mee_build() {
-    start_cmd make -j $CPUS -C src
+    bee_build -C src
 }
 
 mee_install() {
-    start_cmd make ROOT=${D} -C src install
+    bee_install ROOT=${D} -C src
 }
