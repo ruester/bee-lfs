@@ -1,0 +1,9 @@
+#!/bin/env beesh
+
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGFULLVERSION}.tar.gz"
+
+build_in_sourcedir
