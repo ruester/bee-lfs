@@ -1,21 +1,15 @@
 #!/bin/env beesh
-require_version 1.0_rc17
 
-CPUS=$(grep -c processor /proc/cpuinfo)
-SRCURL[0]="/usr/src/groff-1.21.tar.gz"
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.gz"
 
 build_in_sourcedir
 
 mee_configure() {
-    PAGE=A4 ${S}/configure --prefix=/usr
-}
-
-mee_build() {
-    start_cmd make -j $CPUS
-}
-
-mee_install() {
-    start_cmd make DESTDIR=${D} install
+    PAGE=A4 bee_configure
 }
 
 mee_install_post() {
