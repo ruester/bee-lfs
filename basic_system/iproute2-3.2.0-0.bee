@@ -1,0 +1,24 @@
+#!/bin/env beesh
+
+require_version 1.0_rc23
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+
+SBINDIR=/sbin
+MANDIR=/usr/share/man
+DOCDIR=/usr/share/doc/${PKGFULLNAME}-${PKGVERSION}
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
+    sed -i /ARPD/d Makefile
+    rm man/man8/arpd.8
+    sed -i -e '/netlink\//d' ip/ipl2tp.c
+}
+
+mee_configure() {
+    true
+}
