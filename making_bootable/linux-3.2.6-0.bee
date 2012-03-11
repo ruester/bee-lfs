@@ -1,0 +1,31 @@
+#!/bin/env beesh
+
+require_version 1.0_rc23
+
+LFSVERSION=7.1
+
+BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+
+build_in_sourcedir
+
+mee_configure() {
+    start_cmd make mrproper
+    start_cmd make ${BEE_MAKEFLAGS} LC_ALL= LANG=$LC_ALL menuconfig
+}
+
+mee_install() {
+    bee_install modules_install
+}
+
+mee_install_post() {
+    mkdir -v ${D}/boot
+
+    cp -v ${S}/arch/x86/boot/bzImage ${D}/boot/${PKGFULLNAME}-${PKGVERSION}-lfs-${LFSVERSION}
+    cp -v ${S}/System.map ${D}/boot/System.map-${PKGVERSION}
+    cp -v ${S}/.config ${D}/boot/config-${PKGVERSION}
+
+    install -d ${D}/usr/share/doc/${PKGFULLNAME}-${PKGVERSION}
+    cp -r ${S}/Documentation/* ${D}/usr/share/doc/${PKGFULLNAME}-${PKGVERSION}
+}
