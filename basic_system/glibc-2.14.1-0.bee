@@ -43,7 +43,7 @@ mee_install() {
 }
 
 mee_install_post() {
-    mkdir -p ${D}/include/{rpc,rpcsvc}
+    mkdir -p ${D}/usr/include/{rpc,rpcsvc}
     cp -v ${S}/sunrpc/rpc/*.h ${D}/usr/include/rpc
     cp -v ${S}/sunrpc/rpcsvc/*.h ${D}/usr/include/rpcsvc
     cp -v ${S}/nis/rpcsvc/*.h ${D}/usr/include/rpcsvc
