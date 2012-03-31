@@ -14,7 +14,7 @@ mee_patch_pre() {
 }
 
 mee_configure() {
-    bee_configure --enable-arch \
+    start_cmd ${S}/configure --enable-arch \
         --enable-partx \
         --enable-write
 }
