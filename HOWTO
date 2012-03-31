@@ -13,7 +13,7 @@ PREPARATIONS
 TOOLCHAIN
 =========
 
-* cd toolchain
+cd toolchain
 * execute build_toolchain.sh to build the toolchain
 
 
@@ -42,7 +42,7 @@ MAKING BOOTABLE
 reenter_chroot.sh
 cd ~/making_bootable
 * install bootscripts:
-lfs-bootscripts-20111017-0.bee && bee install lfs-bootscripts
+./lfs-bootscripts-20120229-0.bee && bee install lfs-bootscripts
 * customize /etc/fstab
 * build the kernel:
 linux-3.2.6-0.bee && bee install linux
