@@ -72,7 +72,7 @@ for i in fhs-1.0 \
         ./${i}-0.bee --no-archive-build --cleanup
         /usr/bin/bee install ${i}-0.${ARCH}
 
-        if [ "${i}" = "glibc-2.14.1-0" ]; then
+        if [ "${i}" = "glibc-2.14.1" ]; then
             ./configuring_glibc.sh
             ./readjusting_toolchain.sh
         fi
