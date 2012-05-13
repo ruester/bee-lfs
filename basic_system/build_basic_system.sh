@@ -3,7 +3,14 @@
 ARCH=$(uname -m)
 
 for i in fhs-1.0 \
-    bee-1.0_rc23 \
+         bee-1.0_rc23; do
+    if [ "$(/tools/bin/bee list -i ${i}-0.${ARCH} | wc -l)" = "0" ]; then
+        ./${i}-0.bee --no-archive-build --cleanup
+        /tools/bin/bee install ${i}-0.${ARCH}
+    fi
+done
+
+for i in fhs-1.0 \
     bee-1.0_rc23 \
     linux-headers-3.2.6 \
     glibc-2.14.1 \
@@ -60,9 +67,9 @@ for i in fhs-1.0 \
     vim-7.3 \
     nano-2.2.6; do
 
-    if [ "$(bee list -i ${i}-0.${ARCH} | wc -l)" = "0" ]; then
+    if [ "$(/usr/bin/bee list -i ${i}-0.${ARCH} | wc -l)" = "0" ]; then
         ./${i}-0.bee --no-archive-build --cleanup
-        bee install ${i}-0.${ARCH}
+        /usr/bin/bee install ${i}-0.${ARCH}
 
         if [ "${i}" = "glibc-2.14.1-0" ]; then
             ./configuring_glibc.sh
