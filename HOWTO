@@ -46,4 +46,5 @@ cd ~/making_bootable
 * customize /etc/fstab
 * build the kernel:
 ./linux-3.2.6-0.bee && bee install linux
+* modify /etc/fstab to fit to your partition configuration
 * install a bootloader and thus make the system bootable
