@@ -13,6 +13,7 @@ done
 for i in fhs-1.0 \
     bee-1.0_rc23 \
     linux-headers-3.2.6 \
+    man-pages-3.35 \
     glibc-2.14.1 \
     zlib-1.2.6 \
     file-5.10 \
