@@ -57,7 +57,7 @@ http://www.linuxfromscratch.org/lfs/downloads/7.1/udev-config-20100128.tar.bz2
 http://www.kernel.org/pub/linux/utils/util-linux/v2.20/util-linux-2.20.1.tar.bz2
 ftp://ftp.vim.org/pub/vim/unix/vim-7.3.tar.bz2
 http://tukaani.org/xz/xz-5.0.3.tar.bz2
-http://sourceforge.net/projects/libpng/files/zlib/1.2.6/zlib-1.2.6.tar.bz2/download
+http://sourceforge.net/projects/libpng/files/zlib/1.2.6/zlib-1.2.6.tar.bz2
 http://www.linuxfromscratch.org/patches/lfs/7.1/bash-4.2-fixes-4.patch
 http://www.linuxfromscratch.org/patches/lfs/7.1/bzip2-1.0.6-install_docs-1.patch
 http://www.linuxfromscratch.org/patches/lfs/7.1/coreutils-8.15-i18n-1.patch
