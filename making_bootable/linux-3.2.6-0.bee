@@ -16,7 +16,7 @@ mee_configure() {
 }
 
 mee_install() {
-    bee_install modules_install
+    start_cmd make DESTDIR=${D} modules_install
 }
 
 mee_install_post() {
