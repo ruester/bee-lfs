@@ -1,0 +1,23 @@
+#!/usr/bin/env beesh
+
+require_version 1.2
+
+SRCDIR=/mnt/lfs/sources
+SRCURL[0]="${SRCDIR}/bee-${PKGVERSION}.tar.gz"
+
+PREFIX=${LFS_PREFIX=/tools}
+export PATH=${PREFIX}/bin:/bin:/usr/bin
+
+build_in_sourcedir
+
+mee_configure() {
+    :
+}
+
+mee_build() {
+    :
+}
+
+mee_install() {
+    make DESTDIR=${D} PREFIX=${PREFIX} install
+}

@@ -7,14 +7,14 @@ mkdir -pv $DIR
 chmod a+wt $DIR
 wget --no-check-certificate -i wget-list -P $DIR -N -nv
 
-if [ -f $DIR/bee-1.0_rc23 ]; then
-    mv $DIR/bee-1.0_rc23 $DIR/bee-1.0_rc23.tar.gz
+if [ -f $DIR/bee-1.2 ]; then
+    mv $DIR/bee-1.2 $DIR/bee-1.2.tar.gz
 fi
 
 for i in $(cat wget-list); do
     A=$(basename $i)
 
-    if [ "${A}" = "bee-1.0_rc23" ]; then
+    if [ "${A}" = "bee-1.2" ]; then
         A="${A}.tar.gz"
     fi
 
