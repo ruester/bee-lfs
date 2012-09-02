@@ -8,7 +8,6 @@ for i in tc-binutils_pass1-*-0 \
     tc-gcc_pass1-*-0 \
     tc-linux-headers-*-0 \
     tc-glibc-*-0 \
-    tc-adjusted-specs-1-0 \
     tc-binutils_pass2-*-0 \
     tc-gcc_pass2-*-0 \
     tc-tcl-*-0 \
