@@ -1,6 +1,6 @@
 #!/usr/bin/env beesh
 
-require_version 1.0_rc23
+require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/gawk-${PKGVERSION}.tar.bz2"
