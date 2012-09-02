@@ -2,6 +2,8 @@
 
 ARCH=$(uname -m)
 
+export BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
+
 for i in tc-binutils_pass1-2.22-0 \
     tc-gcc_pass1-4.6.2-0 \
     tc-linux-headers-3.2.6-0 \

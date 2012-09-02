@@ -2,7 +2,6 @@
 
 require_version 1.0_rc23
 
-BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/file-${PKGVERSION}.tar.gz"
 PREFIX=${LFS_PREFIX=/tools}
