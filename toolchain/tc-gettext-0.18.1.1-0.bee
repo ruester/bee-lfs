@@ -4,20 +4,26 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/gettext-${PKGVERSION}.tar.gz"
+
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 build_in_sourcedir
 
+mee_patch() {
+    sed -i -e '/gets is a/d' gettext-*/*/stdio.in.h
+}
+
 mee_configure() {
-    start_cmd ${S}/gettext-tools/configure \
+    cd ${S}/gettext-tools
+    EMACS="no" ./configure \
         --prefix=${PREFIX} \
         --disable-shared
 }
 
 mee_build() {
-    bee_build -C gnulib-lib
-    bee_build -j $CPUS -C src msgfmt
+    make ${BEE_MAKEFLAGS} -C gnulib-lib
+    make ${BEE_MAKEFLAGS} -C src msgfmt
 }
 
 mee_install() {
