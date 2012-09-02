@@ -3,24 +3,24 @@
 require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
-SRCURL[0]="${SRCDIR}/glibc-${PKGVERSION}.tar.bz2"
-PATCHURL[0]="${SRCDIR}/glibc-2.14.1-gcc_fix-1.patch"
-PATCHURL[1]="${SRCDIR}/glibc-2.14.1-cpuid-1.patch"
+SRCURL[0]="${SRCDIR}/glibc-${PKGVERSION}.tar.xz"
+
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
-mee_configure_pre() {
-    # set some config parameter
-    case `uname -m` in
-        i?86)
-            echo "CFLAGS += -march=i486 -mtune=native" > configparms
-            ;;
-    esac
+mee_patch() {
+    if [ ! -r /usr/include/rpc/types.h ]; then
+        su -c 'mkdir -p /usr/include/rpc'
+        su -c 'cp -v sunrpc/rpc/*.h /usr/include/rpc'
+    fi
+
+    sed -i 's/ -lgcc_s//' Makeconfig
 }
 
 mee_configure() {
-    bee_configure \
+    ${S}/configure \
+        --prefix=${PREFIX} \
         --host=${LFS_TGT} \
         --build=$(${S}/scripts/config.guess) \
         --disable-profile \
@@ -28,9 +28,14 @@ mee_configure() {
         --enable-kernel=2.6.25 \
         --with-headers=${PREFIX}/include \
         libc_cv_forced_unwind=yes \
+        libc_cv_ctors_header=yes \
         libc_cv_c_cleanup=yes
 }
 
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
 mee_install() {
-    bee_install install_root=${D}
+    make install_root=${D} ${BEE_MAKEFLAGS} install
 }
