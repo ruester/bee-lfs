@@ -4,6 +4,7 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/tcl${PKGVERSION}-src.tar.gz"
+
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
@@ -11,7 +12,7 @@ build_in_sourcedir
 
 mee_configure() {
     cd ${S}/unix
-    start_cmd ./configure --prefix=/tools
+    start_cmd ./configure --prefix=${PREFIX}
 }
 
 mee_build() {
@@ -21,8 +22,9 @@ mee_build() {
 
 mee_install() {
     cd ${S}/unix
-    start_cmd make ${BEE_MAKEFAGS} DESTDIR=${D} \
-                   install install-private-headers
+    start_cmd make ${BEE_MAKEFLAGS} DESTDIR=${D} \
+        install \
+        install-private-headers
 }
 
 mee_install_post() {
