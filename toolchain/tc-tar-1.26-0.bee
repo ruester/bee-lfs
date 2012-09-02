@@ -4,11 +4,26 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/tar-${PKGVERSION}.tar.bz2"
+
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 build_in_sourcedir
 
+mee_patch() {
+    sed -i -e '/gets is a/d' gnu/stdio.in.h
+}
+
 mee_configure() {
-    bee_configure FORCE_UNSAFE_CONFIGURE=1
+    ${S}/configure \
+        --prefix=${PREFIX} \
+        FORCE_UNSAFE_CONFIGURE=1
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make DESTDIR=${D} ${BEE_MAKEFLAGS} install
 }
