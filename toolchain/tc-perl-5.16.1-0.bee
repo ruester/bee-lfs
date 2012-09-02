@@ -4,7 +4,8 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/perl-${PKGVERSION}.tar.bz2"
-PATCHURL[0]="${SRCDIR}/perl-5.14.2-libc-1.patch"
+PATCHURL[0]="${SRCDIR}/perl-${PKGVERSION}-libc-2.patch"
+
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
@@ -22,6 +23,6 @@ mee_install() {
     mkdir -p ${D}/${PREFIX}/bin
     start_cmd cp -v perl cpan/podlators/pod2man ${D}/${PREFIX}/bin
 
-    mkdir -p ${D}/${PREFIX}/lib/perl5/5.14.2
-    start_cmd cp -Rv lib/* ${D}/${PREFIX}/lib/perl5/5.14.2
+    mkdir -p ${D}/${PREFIX}/lib/perl5/${PKGVERSION}
+    start_cmd cp -Rv lib/* ${D}/${PREFIX}/lib/perl5/${PKGVERSION}
 }
