@@ -4,16 +4,25 @@ require_version 1.0_rc23
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/binutils-${PKGVERSION}.tar.bz2"
+PATCHURL[0]="${SRCDIR}/binutils-${PKGVERSION}-build_fix-1.patch"
+
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
 # use non-default configure options..
 mee_configure() {
-    bee_configure \
+    ${S}/configure \
+        --prefix=${PREFIX} \
+        --with-sysroot=/mnt/lfs \
+        --with-lib-path=/tools/lib \
         --target=${LFS_TGT} \
         --disable-nls \
         --disable-werror
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
 }
 
 # before installing we need to fix the lib vs. lib64 issue:
@@ -22,4 +31,8 @@ mee_install_pre() {
         start_cmd mkdir -pv ${D}/${PREFIX}/lib
         start_cmd ln -sv lib ${D}/${PREFIX}/lib64
     fi
+}
+
+mee_install() {
+    make DESTDIR=${D} ${BEE_MAKEFLAGS} install
 }
