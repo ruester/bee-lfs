@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-ARCH=$(uname -m)
-
 export BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
 
 for i in tc-binutils_pass1-*-0 \
