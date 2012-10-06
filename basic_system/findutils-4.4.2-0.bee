@@ -5,9 +5,14 @@ require_version 1.2
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.gz"
 
-LOCALSTATEDIR=/var/lib/locate
-
 build_in_sourcedir
+
+mee_configure() {
+    ./configure \
+        --prefix=/usr \
+        --libexecdir=/usr/lib/findutils \
+        --localstatedir=/var/lib/locate
+}
 
 mee_install_post() {
     mkdir -pv ${D}/bin
