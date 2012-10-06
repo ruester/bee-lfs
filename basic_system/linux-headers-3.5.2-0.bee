@@ -8,11 +8,11 @@ SRCURL[0]="${SRCDIR}/linux-${PKGVERSION}.tar.xz"
 build_in_sourcedir
 
 mee_build() {
-    bee_build mrproper headers_check
+    make ${BEE_MAKEFLAGS} mrproper headers_check
 }
 
 mee_install() {
-    start_cmd make INSTALL_HDR_PATH=dest headers_install
+    make ${BEE_MAKEFLAGS} INSTALL_HDR_PATH=dest headers_install
 }
 
 mee_install_post() {
