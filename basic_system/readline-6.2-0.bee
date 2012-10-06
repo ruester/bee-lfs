@@ -15,8 +15,16 @@ mee_patch_pre() {
     sed -i '/{OLDSUFF}/c:' support/shlib-install
 }
 
+mee_configure() {
+    ./configure --prefix=/usr --libdir=/lib
+}
+
 mee_build() {
-    bee_build SHLIB_LIBS=-lncurses
+    make ${BEE_MAKEFLAGS} SHLIB_LIBS=-lncurses
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
 }
 
 mee_install_post() {
