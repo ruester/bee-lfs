@@ -2,7 +2,6 @@
 
 require_version 1.0_rc23
 
-BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
 PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-test_fix-1.patch"
