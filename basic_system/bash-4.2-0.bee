@@ -6,12 +6,21 @@ SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.gz"
 PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-fixes-4.patch"
 
-BINDIR=/bin
-
 build_in_sourcedir
 
 mee_configure() {
-    bee_configure --htmldir=/usr/share/doc/${PKGFULLNAME}-${PKGVERSION} \
+    ./configure \
+        --prefix=/usr \
+        --bindir=/bin \
+        --htmldir=/usr/share/doc/${PKGFULLNAME}-${PKGVERSION} \
         --without-bash-malloc \
         --with-installed-readline
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
 }
