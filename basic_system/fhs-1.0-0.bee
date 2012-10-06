@@ -21,7 +21,7 @@ mee_install() {
     mkdir -pv ${D}/{media/{floppy,cdrom},sbin,srv,var}
 
     install -dv -m 0750 ${D}/root
-    install -dv -m 1777 ${D}/tmp ${TARGET}/var/tmp
+    install -dv -m 1777 ${D}/tmp ${D}/var/tmp
 
     mkdir -pv ${D}/usr/{,local/}{bin,include,lib,sbin,src}
     mkdir -pv ${D}/usr/{,local/}share/{doc,info,locale,man}
