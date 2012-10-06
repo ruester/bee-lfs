@@ -1,0 +1,37 @@
+#!/bin/env beesh
+
+require_version 1.2
+
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-res_query_fix-1.patch"
+
+mee_patch_pre() {
+    sed -i 's#<rpc/types.h>#"rpc/types.h"#' sunrpc/rpc_clntout.c
+    sed -i '/test-installation.pl/d' Makefile
+    sed -i 's|@BASH@|/bin/bash|' elf/ldd.bash.in
+}
+
+mee_configure() {
+    ${S}/configure \
+        --prefix=/usr \
+        --disable-profile \
+        --enable-add-ons \
+        --enable-kernel=2.6.25 \
+        --libexecdir=/usr/lib/${PKGFULLNAME}
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} install_root=${D} localedata/install-locales
+}
+
+mee_install_post() {
+    mkdir -p ${D}/usr/include/{rpc,rpcsvc}
+    cp -v ${S}/sunrpc/rpc/*.h ${D}/usr/include/rpc
+    cp -v ${S}/sunrpc/rpcsvc/*.h ${D}/usr/include/rpcsvc
+    cp -v ${S}/nis/rpcsvc/*.h ${D}/usr/include/rpcsvc
+}
