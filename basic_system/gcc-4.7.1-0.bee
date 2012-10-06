@@ -5,19 +5,20 @@ require_version 1.2
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
 
-LIBEXECDIR=/usr/lib
-
 mee_patch_pre() {
     sed -i 's/install_to_$(INSTALL_DEST) //' libiberty/Makefile.in
     case `uname -m` in
         i?86) sed -i 's/^T_CFLAGS =$/& -fomit-frame-pointer/' \
             gcc/Makefile.in ;;
     esac
-    sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+    sed -i -e /autogen/d -e /check.sh/d fixincludes/Makefile.in
 }
 
 mee_configure() {
-    bee_configure --enable-shared \
+    ${S}/configure \
+        --prefix=/usr \
+        --libexecdir=/usr/lib \
+        --enable-shared \
         --enable-threads=posix \
         --enable-__cxa_atexit \
         --enable-clocale=gnu \
@@ -27,8 +28,26 @@ mee_configure() {
         --with-system-zlib
 }
 
-mee_install_post() {
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install_pre() {
+    # prepare fix for misplaced python scripts
     mkdir -pv ${D}/lib
+    ln -svf lib ${D}/lib64
+
+    mkdir -pv ${D}/usr/lib
+    ln -svf lib ${D}/usr/lib64
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
+}
+
+mee_install_post() {
     ln -sv ../usr/bin/cpp ${D}/lib
     ln -sv gcc ${D}/usr/bin/cc
+    mkdir -pv ${D}/usr/share/gdb/auto-load/usr/lib
+    mv -v ${D}/usr/lib/*gdb.py ${D}/usr/share/gdb/auto-load/usr/lib
 }
