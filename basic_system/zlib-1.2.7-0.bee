@@ -8,7 +8,15 @@ SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
 build_in_sourcedir
 
 mee_configure() {
-    start_cmd ${S}/configure --prefix=/usr
+    ./configure --prefix=/usr
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make DESTDIR=${D} ${BEE_MAKEFLAGS} install
 }
 
 mee_install_post() {
