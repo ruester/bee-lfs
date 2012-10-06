@@ -10,3 +10,11 @@ build_in_sourcedir
 mee_configure() {
     true
 }
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
+}
