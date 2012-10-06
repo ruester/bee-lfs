@@ -4,6 +4,7 @@ require_version 1.2
 
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-build_fix-1.patch"
 
 mee_patch_pre() {
     if [ $(expect -c "spawn ls") != "spawn ls" ]; then
@@ -12,20 +13,20 @@ mee_patch_pre() {
 
     rm -fv etc/standards.info
     sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
-    sed -i "/exception_defines.h/d" ld/testsuite/ld-elf/new.cc
-    sed -i "s/-fvtable-gc //" ld/testsuite/ld-selective/selective.exp
 }
 
 mee_configure() {
-    bee_configure --enable-shared
+    ${S}/configure \
+        --prefix=/usr \
+        --enable-shared
 }
 
 mee_build() {
-    bee_build tooldir=/usr
+    make ${BEE_MAKEFLAGS} tooldir=/usr
 }
 
 mee_install() {
-    bee_install tooldir=/usr
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} tooldir=/usr install
 }
 
 mee_install_post() {
