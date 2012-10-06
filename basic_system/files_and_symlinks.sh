@@ -5,7 +5,7 @@ mkdir -pv /{bin,boot,etc/{opt,sysconfig},home,lib,mnt,opt,run}
 mkdir -pv /{media/{floppy,cdrom},sbin,srv,var}
 
 install -dv -m 0750 /root
-install -dv -m 1777 /tmp ${LFS}/var/tmp
+install -dv -m 1777 /tmp /var/tmp
 
 mkdir -pv /usr/{,local/}{bin,include,lib,sbin,src}
 mkdir -pv /usr/{,local/}share/{doc,info,locale,man}
@@ -34,13 +34,11 @@ ln -sv bash /bin/sh
 
 touch /etc/mtab
 
-# required by perl
-echo "127.0.0.1 localhost" > /etc/hosts
-
 # required by udev
 install -dv /lib/{firmware,udev/devices/pts}
 mknod -m0666 /lib/udev/devices/null c 1 3
 
+# basic /etc things
 cat > /etc/passwd << "EOF"
 root:x:0:0:root:/root:/bin/bash
 bin:x:1:1:bin:/dev/null:/bin/false
@@ -68,9 +66,11 @@ mail:x:34:
 nogroup:x:99:
 EOF
 
-touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
-chgrp -v utmp /var/run/utmp /var/log/lastlog
-chmod -v 664 /var/run/utmp /var/log/lastlog
+# required by login, agetty, init
+touch /var/log/{btmp,lastlog,wtmp}
+chgrp -v utmp /var/log/lastlog
+chmod -v 664 /var/log/lastlog
+chmod -v 600 /var/log/btmp
 
 # required by hwclock
 mkdir -pv /etc/sysconfig
@@ -97,7 +97,7 @@ cat > /etc/sysconfig/console << "EOF"
 # End /etc/sysconfig/console
 EOF
 
-# required by the bash
+# required by bash
 cat > /etc/profile << "EOF"
 # Begin /etc/profile
 
