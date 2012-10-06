@@ -3,7 +3,7 @@
 require_version 1.2
 
 SRCDIR=/sources
-SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
 
 build_in_sourcedir
 
@@ -13,9 +13,15 @@ mee_patch_pre() {
 }
 
 mee_configure() {
-    start_cmd ${S}/configure --enable-arch \
-        --enable-partx \
-        --enable-write
+    ./configure
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
 }
 
 mee_install_post() {
