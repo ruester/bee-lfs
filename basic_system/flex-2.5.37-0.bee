@@ -4,9 +4,24 @@ require_version 1.2
 
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
-PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-gcc44-1.patch"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-bison-2.6.1-1.patch"
 
 build_in_sourcedir
+
+mee_configure() {
+    ./configure \
+        --prefix=/usr \
+        --mandir=/usr/share/man \
+        --infodir=/usr/share/info
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
+}
 
 mee_install_post() {
     ln -sv libfl.a ${D}/usr/lib/libl.a
