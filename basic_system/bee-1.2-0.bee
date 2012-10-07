@@ -6,3 +6,15 @@ SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGFULLVERSION}.tar.gz"
 
 build_in_sourcedir
+
+mee_configure() {
+    :
+}
+
+mee_build() {
+    :
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} PREFIX=/usr DESTDIR=${D} install
+}

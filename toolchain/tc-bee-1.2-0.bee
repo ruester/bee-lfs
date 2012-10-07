@@ -19,5 +19,5 @@ mee_build() {
 }
 
 mee_install() {
-    make DESTDIR=${D} PREFIX=${PREFIX} install
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} PREFIX=${PREFIX} install
 }
