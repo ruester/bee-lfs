@@ -76,3 +76,5 @@ for i in fhs-*-0 \
         fi
     fi
 done
+
+echo "building basic system finished"

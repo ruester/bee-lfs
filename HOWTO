@@ -22,7 +22,7 @@ BASIC SYSTEM
 
 * run the scripts to enter the chroot environment:
 cd ../basic_system
-./prepare_vkfs.sh
+./preparing_vkfs.sh
 ./entering_chroot.sh
 cd ~/basic_system
 ./files_and_symlinks.sh
@@ -39,12 +39,11 @@ logout
 MAKING BOOTABLE
 ===============
 
-reenter_chroot.sh
+./reenter_chroot.sh
 cd ~/making_bootable
 * install bootscripts:
-./lfs-bootscripts-20120229-0.bee && bee install lfs-bootscripts
-* customize /etc/fstab
+./lfs-bootscripts-20120901-0.bee --install --no-archive
 * build the kernel:
-./linux-3.2.6-0.bee && bee install linux
+./linux-3.5.2-0.bee --install --no-archive
 * modify /etc/fstab to fit to your partition configuration
 * install a bootloader and thus make the system bootable
