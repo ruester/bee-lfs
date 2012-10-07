@@ -1,0 +1,34 @@
+#!/usr/bin/env beesh
+
+require_version 1.2
+
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.gz"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-backspace-1.patch"
+PATCHURL[1]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-upstream_fixes-1.patch"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i '/guardado\ el/s/\(^.*en\ %\)\(.*\)/\14\$\2/' po/es.po
+    sed -i 's/\(RESIZECONS_PROGS=\)yes/\1no/' configure &&
+    sed -i 's/resizecons.8 //' man/man8/Makefile.in &&
+    touch -d '2011-05-07 08:30' configure.ac
+}
+
+mee_configure() {
+    ./configure --prefix=/usr --datadir=/lib/kbd
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
+}
+
+mee_install_post() {
+    mkdir -pv ${D}/bin
+    mv -v ${D}/usr/bin/{kbd_mode,loadkeys,openvt,setfont} ${D}/bin
+}
