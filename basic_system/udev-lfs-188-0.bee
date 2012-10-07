@@ -1,0 +1,36 @@
+#!/usr/bin/env beesh
+
+require_version 1.2
+
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-3.tar.bz2"
+SRCURL[1]="${SRCDIR}/systemd-${PKGVERSION}.tar.xz"
+
+build_in_sourcedir
+
+mee_extract() {
+    cd ${S}
+    tar xf ${F}/systemd-${PKGVERSION}.tar.xz
+    cd systemd-${PKGVERSION}
+    tar xf ${F}/${PKGFULLNAME}-${PKGVERSION}-3.tar.bz2
+}
+
+mee_configure() {
+    :
+}
+
+mee_build() {
+    cd ${S}/systemd-${PKGVERSION}
+    make -f ${PKGFULLNAME}-${PKGVERSION}/Makefile.lfs
+}
+
+mee_install() {
+    cd ${S}/systemd-${PKGVERSION}
+    make DESTDIR=${D} -f ${PKGFULLNAME}-${PKGVERSION}/Makefile.lfs install
+}
+
+mee_install_post() {
+    cd ${S}/systemd-${PKGVERSION}
+    sed -i -e "s@RULES_FILE='/etc/udev/rules.d/70-persistent-net.rules'@RULES_FILE='${D}/etc/udev/rules.d/70-persistent-net.rules'@" ${PKGFULLNAME}-${PKGVERSION}/init-net-rules.sh
+    bash ${PKGFULLNAME}-${PKGVERSION}/init-net-rules.sh
+}
