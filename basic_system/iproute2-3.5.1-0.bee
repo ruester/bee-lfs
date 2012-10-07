@@ -1,0 +1,30 @@
+#!/usr/bin/env beesh
+
+require_version 1.2
+
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+
+build_in_sourcedir
+
+mee_patch_post() {
+    sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
+    sed -i /ARPD/d Makefile
+    sed -i 's/arpd.8//' man/man8/Makefile
+}
+
+mee_configure() {
+    true
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS} DESTDIR=
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} \
+         DESTDIR=${D} \
+         MANDIR=/usr/share/man \
+         DOCDIR=/usr/share/doc/${PKGFULLNAME}-${PKGVERSION} \
+         install
+}
