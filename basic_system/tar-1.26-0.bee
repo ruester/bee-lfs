@@ -5,11 +5,24 @@ require_version 1.2
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.bz2"
 
-LIBEXECDIR=/usr/sbin
-BINDIR=/bin
-
 build_in_sourcedir
 
+mee_configure_post() {
+    sed -i -e '/gets is a/d' gnu/stdio.in.h
+}
+
 mee_configure() {
-    FORCE_UNSAFE_CONFIGURE=1 bee_configure
+    FORCE_UNSAFE_CONFIGURE=1 \
+    ./configure \
+        --prefix=/usr \
+        --bindir=/bin \
+        --libexecdir=/usr/sbin
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
 }
