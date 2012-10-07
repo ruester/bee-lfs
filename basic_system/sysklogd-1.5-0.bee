@@ -12,11 +12,11 @@ mee_configure() {
 }
 
 mee_build() {
-    start_cmd make ${BEE_MAKEFLAGS}
+    make ${BEE_MAKEFLAGS}
 }
 
 mee_install() {
-    start_cmd make ${BEE_MAKEFLAGS} prefix=${D} install
+    make ${BEE_MAKEFLAGS} prefix=${D} install
 }
 
 mee_install_pre() {
