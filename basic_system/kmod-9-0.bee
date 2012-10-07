@@ -4,22 +4,26 @@ require_version 1.2
 
 SRCDIR=/sources
 SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+PATCHURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}-testsuite-1.patch"
 
-BINDIR=/bin
-LIBDIR=/lib
-SYSCONFDIR=/etc
+build_in_sourcedir
 
 mee_configure() {
-    liblzma_CFLAGS="-I/usr/include" \
-    liblzma_LIBS="-L/lib -llzma"    \
-    zlib_CFLAGS="-I/usr/include"    \
-    zlib_LIBS="-L/lib -lz"          \
-    bee_configure --with-xz \
+    ./configure \
+        --prefix=/usr \
+        --bindir=/bin \
+        --libdir=/lib \
+        --sysconfdir=/etc \
+        --with-xz \
         --with-zlib
 }
 
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
 mee_install() {
-    bee_install pkgconfigdir=/usr/lib/pkgconfig
+    make ${BEE_MAKEFLAGS} pkgconfigdir=/usr/lib/pkgconfig DESTDIR=${D} install
 }
 
 mee_install_post() {
