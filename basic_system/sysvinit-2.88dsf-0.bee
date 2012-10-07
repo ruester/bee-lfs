@@ -20,9 +20,9 @@ mee_configure() {
 }
 
 mee_build() {
-    bee_build -C src
+    make ${BEE_MAKEFLAGS} -C src
 }
 
 mee_install() {
-    bee_install ROOT=${D} -C src
+    make ${BEE_MAKEFLAGS} ROOT=${D} -C src install
 }
