@@ -1,0 +1,32 @@
+#!/usr/bin/env beesh
+
+require_version 1.2
+
+SRCDIR=/sources
+SRCURL[0]="${SRCDIR}/${PKGFULLNAME}-${PKGVERSION}.tar.xz"
+
+build_in_sourcedir
+
+mee_patch_pre() {
+    sed -i -e '/gets is a/d' gnulib/lib/stdio.in.h
+}
+
+mee_configure() {
+    ./configure \
+        --prefix=/usr \
+        --libexecdir=/usr/lib \
+        --docdir=/usr/share/doc/${PKGFULLNAME}-${PKGVERSION} \
+        --sysconfdir=/etc \
+        --disable-setuid \
+        --with-browser=/usr/bin/lynx \
+        --with-vgrind=/usr/bin/vgrind \
+        --with-grap=/usr/bin/grap
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
+mee_install() {
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} install
+}
