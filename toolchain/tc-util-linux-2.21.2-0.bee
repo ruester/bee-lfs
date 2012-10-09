@@ -12,7 +12,7 @@ export PATH=${PREFIX}/bin:/bin:/usr/bin
 build_in_sourcedir
 
 mee_configure() {
-    ${S}/configure
+    ${S}/configure --prefix=/tools
 }
 
 mee_build() {
