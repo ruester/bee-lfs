@@ -15,7 +15,7 @@ mee_configure() {
     ${S}/configure \
         --prefix=${PREFIX} \
         --with-sysroot=/mnt/lfs \
-        --with-lib-path=/tools/lib \
+        --with-lib-path=${PREFIX}/lib \
         --target=${LFS_TGT} \
         --disable-nls \
         --disable-werror
