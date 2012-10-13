@@ -1,8 +1,8 @@
 #!/usr/bin/env beesh
 
-require_version 1.0_rc23
+require_version 1.2
 
-LFSVERSION=7.1
+LFSVERSION=7.2
 
 BEE_MAKEFLAGS="-j $(grep -c processor /proc/cpuinfo)"
 SRCDIR=/sources
@@ -13,6 +13,10 @@ build_in_sourcedir
 mee_configure() {
     start_cmd make mrproper
     start_cmd make ${BEE_MAKEFLAGS} LC_ALL= LANG=$LC_ALL menuconfig
+}
+
+mee_build() {
+    make ${BEE_MAKEFLAGS}
 }
 
 mee_install() {
