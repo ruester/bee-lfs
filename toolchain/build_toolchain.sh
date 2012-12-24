@@ -34,7 +34,7 @@ for i in tc-binutils_pass1-*-0 \
     tc-util-linux-*-0 \
     tc-bee-*-0; do
 
-    if [ "$(bee list -i ${i%%-\**} | wc -l)" == "0" ] ; then
+    if [ "$(bee list --exact -i ${i%%-\**} | wc -l)" == "0" ] ; then
         ./${i}.bee --no-archive-build --cleanup --install
     fi
 done
