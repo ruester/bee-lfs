@@ -26,7 +26,7 @@ mee_build() {
 }
 
 mee_install() {
-    make ${BEE_MAKEFLAGS} install_root=${D} localedata/install-locales
+    make ${BEE_MAKEFLAGS} install_root=${D} localedata/install-locales install
 }
 
 mee_install_post() {
