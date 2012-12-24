@@ -67,7 +67,7 @@ for i in fhs-*-0 \
     vim-*-0 \
     nano-*-0; do
 
-    if [ "$(/usr/bin/bee list -i ${i%%-\**} | wc -l)" = "0" ]; then
+    if [ "$(/usr/bin/bee list --exact -i ${i%%-\**} | wc -l)" = "0" ]; then
         /usr/bin/beesh ${i}.bee --no-archive-build --cleanup --install
 
         if [ "${i}" = "tzdata-*-0" ]; then
