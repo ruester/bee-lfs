@@ -4,7 +4,7 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/perl-${PKGVERSION}.tar.bz2"
-PATCHURL[0]="${SRCDIR}/perl-${PKGVERSION}-libc-2.patch"
+PATCHURL[0]="${SRCDIR}/perl-${PKGVERSION}-libc-1.patch"
 
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
