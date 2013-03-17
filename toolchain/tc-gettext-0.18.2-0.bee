@@ -22,11 +22,13 @@ mee_configure() {
 }
 
 mee_build() {
+    cd ${S}/gettext-tools
     make ${BEE_MAKEFLAGS} -C gnulib-lib
     make ${BEE_MAKEFLAGS} -C src msgfmt
 }
 
 mee_install() {
+    cd ${S}/gettext-tools
     mkdir -p ${D}/${PREFIX}/bin
     start_cmd cp -v src/msgfmt ${D}/${PREFIX}/bin
 }
