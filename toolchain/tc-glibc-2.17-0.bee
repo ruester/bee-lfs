@@ -24,7 +24,6 @@ mee_configure() {
         --host=${LFS_TGT} \
         --build=$(${S}/scripts/config.guess) \
         --disable-profile \
-        --enable-add-ons \
         --enable-kernel=2.6.25 \
         --with-headers=${PREFIX}/include \
         libc_cv_forced_unwind=yes \
