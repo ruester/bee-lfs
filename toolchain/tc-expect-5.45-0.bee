@@ -4,6 +4,7 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/expect${PKGVERSION}.tar.gz"
+
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
 
@@ -15,11 +16,16 @@ mee_configure_pre() {
 }
 
 mee_configure() {
-    bee_configure \
+    ${S}/configure \
+        --prefix=${PREFIX} \
         --with-tcl=${PREFIX}/lib \
         --with-tclinclude=${PREFIX}/include
 }
 
+mee_build() {
+    make ${BEE_MAKEFLAGS}
+}
+
 mee_install() {
-    bee_install SCRIPTS=""
+    make ${BEE_MAKEFLAGS} DESTDIR=${D} SCRIPTS="" install
 }
