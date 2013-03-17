@@ -3,7 +3,7 @@
 require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
-SRCURL[0]="${SRCDIR}/texinfo-${PKGVERSION}.tar.gz"
+SRCURL[0]="${SRCDIR}/texinfo-${PKGVERSION}.tar.xz"
 
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
