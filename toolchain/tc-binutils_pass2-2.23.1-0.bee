@@ -4,7 +4,6 @@ require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
 SRCURL[0]="${SRCDIR}/binutils-${PKGVERSION}.tar.bz2"
-PATCHURL[0]="${SRCDIR}/binutils-${PKGVERSION}-build_fix-1.patch"
 
 : ${LFS_TGT=$(uname -m)-lfs-linux-gnu}
 PREFIX=${LFS_PREFIX=/tools}
@@ -20,7 +19,8 @@ mee_configure() {
     ${S}/configure \
         --prefix=${PREFIX} \
         --disable-nls \
-        --with-lib-path=${PREFIX}/lib
+        --with-lib-path=${PREFIX}/lib \
+        --with-sysroot
 }
 
 mee_build() {
