@@ -3,7 +3,7 @@
 require_version 1.2
 
 SRCDIR=/mnt/lfs/sources
-SRCURL[0]="${SRCDIR}/patch-${PKGVERSION}.tar.bz2"
+SRCURL[0]="${SRCDIR}/patch-${PKGVERSION}.tar.xz"
 
 PREFIX=${LFS_PREFIX=/tools}
 export PATH=${PREFIX}/bin:/bin:/usr/bin
