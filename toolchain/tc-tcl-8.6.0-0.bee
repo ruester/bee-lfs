@@ -28,6 +28,6 @@ mee_install() {
 }
 
 mee_install_post() {
-    chmod -v u+w ${D}/${PREFIX}/lib/libtcl8.5.so
-    ln -sv tclsh8.5 ${D}/${PREFIX}/bin/tclsh
+    chmod -v u+w ${D}/${PREFIX}/lib/libtcl8.6.so
+    ln -sv tclsh8.6 ${D}/${PREFIX}/bin/tclsh
 }
