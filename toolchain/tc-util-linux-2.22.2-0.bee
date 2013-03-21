@@ -12,7 +12,11 @@ export PATH=${PREFIX}/bin:/bin:/usr/bin
 build_in_sourcedir
 
 mee_configure() {
-    ${S}/configure --prefix=/tools
+    ${S}/configure \
+        --prefix=/tools \
+        --disable-su \
+        --disable-sulogin \
+        --disable-login
 }
 
 mee_build() {
